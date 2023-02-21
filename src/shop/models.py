@@ -1,5 +1,6 @@
 from django.db import models
 from django.db import models
+from django.utils.text import slugify
 
 from accounts.models import CustomUser
 # Create your models here.
@@ -8,9 +9,16 @@ from accounts.models import CustomUser
     
 class Product(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nom")
+    slug = models.SlugField(default="", blank=True)
     description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name="Prix")
-    image = models.ImageField(upload_to='shop', blank=True)
+    price = models.DecimalField(max_digits=7, decimal_places=2, default = 0.00,verbose_name="Prix")
+    image = models.ImageField(upload_to='shop', blank=True, null=True)
+    stock = models.IntegerField(default=0)
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
     
     def __str__(self) -> str:
         return self.name
@@ -39,6 +47,7 @@ class Cart(models.Model):
         cart_products = self.cartproduct_set.all()
         quantity = sum([cp.quantity for cp in cart_products])
         return quantity
+    
 
 class CartProduct(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
