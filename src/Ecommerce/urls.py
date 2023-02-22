@@ -16,10 +16,14 @@ Including another URLconf
 
 from django.urls import path, include
 from django.contrib import admin
+from django.conf.urls.static import static
+
+from Ecommerce import settings
+
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path("", include("shop.urls", namespace="shop")),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

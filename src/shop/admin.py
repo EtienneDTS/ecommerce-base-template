@@ -1,5 +1,5 @@
 from django.contrib import admin
-from shop.models import Product
+from shop.models import Product, ProductImage, Category
 from accounts.models import CustomUser
 
 # Register your models here.
@@ -29,3 +29,18 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(ProductImage)
+class UserAdmin(admin.ModelAdmin):
+    list_display = (
+        "product",
+        "image",
+    )
+    
+
+@admin.register(Category)
+class UserAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+    )

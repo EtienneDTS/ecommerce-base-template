@@ -6,6 +6,14 @@ from accounts.models import CustomUser
 # Create your models here.
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, blank=True)
+    
+    class Meta:
+        verbose_name = "Categorie"
+        
+    def __str__(self) -> str:
+        return self.name
     
 class Product(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nom")
@@ -14,6 +22,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2, default = 0.00,verbose_name="Prix")
     image = models.ImageField(upload_to='shop', blank=True, null=True)
     stock = models.IntegerField(default=0)
+    categories = models.ManyToManyField(Category)
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -25,6 +34,14 @@ class Product(models.Model):
     
     class Meta:
         verbose_name = "Produit"
+
+# allow several images for one product        
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='shop', blank=True, null=True)
+    
+    class Meta:
+        verbose_name = "images de produit"        
     
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

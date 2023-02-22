@@ -6,6 +6,6 @@ from .models import Product
 
 def home_view(request):
     products = Product.objects.all()
-    return render(request, "home/home_shop.html", context={
+    return render(request, "shop/home_shop.html", context={
         "products": products,
     })

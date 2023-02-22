@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block addstylesheet %}
+    <link rel="stylesheet" href="{% static 'shop.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% for product in products %}
+    <div class="card">
+        <img src="{{product.image.url}}" alt="L'image de l'article">
+        <h2>{{product.name}}</h1>
+        <h3>{{product.price}} €</h1>
+    </div>
+    {% endfor %}
+
+{% endblock %}
