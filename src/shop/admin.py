@@ -1,5 +1,5 @@
 from django.contrib import admin
-from shop.models import Product, ProductImage, Category
+from shop.models import Product, ProductImage, Category, CartProduct, Cart
 from accounts.models import CustomUser
 
 # Register your models here.
@@ -39,6 +39,10 @@ class UserAdmin(admin.ModelAdmin):
     )
     
 
+@admin.register(CartProduct)
+class UserAdmin(admin.ModelAdmin):
+    pass
+    
 @admin.register(Category)
 class UserAdmin(admin.ModelAdmin):
     list_display = (

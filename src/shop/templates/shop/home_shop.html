@@ -1,16 +1,23 @@
 {% extends "base/base.html" %}
 {% load static %}
 
+<!-- modify the block title -->
+{% block title %}
+    <title>"SEO" | "sitename"</title>
+{% endblock %}
+
 {% block addstylesheet %}
-    <link rel="stylesheet" href="{% static 'shop.css' %}">
+    <link rel="stylesheet" href="{% static 'home_shop.css' %}">
 {% endblock %}
 
 {% block content %}
     {% for product in products %}
     <div class="card">
-        <img src="{{product.image.url}}" alt="L'image de l'article">
-        <h2>{{product.name}}</h1>
-        <h3>{{product.price}} €</h1>
+        <a href="{% url 'shop:product_detail' slug=product.slug %}">
+            <img src="{{product.image.url}}" alt="L'image de l'article">
+        </a>
+        <a href="{% url 'shop:product_detail' slug=product.slug %}"><h2>{{product.name}}</h2></a>
+        <h3>{{product.price}} €</h3>
     </div>
     {% endfor %}
 

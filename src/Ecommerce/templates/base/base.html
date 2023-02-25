@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,18 +8,29 @@
     {% block title %}
     <title>La boutique en ligne</title>
     {% endblock %}
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+    <link rel="stylesheet" href="{% static 'reset.css' %}">
     {% block addstylesheet %}
     {% endblock %}
 </head>
 <body>
     {% block navbar %}
         <nav>
-            
+            <ul>
+                <li><a href="{% url 'shop:home_shop' %}">shop name</a></li>
+                <li>qzdqd</li>
+                <li>qdqzd</li>
+                <li>qdzqd</li>
+                <li><a href="{% url 'shop:cart' %}">Cart</a></li>
+            </ul>  
         </nav>
     {% endblock %}
 
 
     {% block content %}
+    {% endblock %}
+
+    {% block footer %}
     {% endblock %}
 </body>
 </html>

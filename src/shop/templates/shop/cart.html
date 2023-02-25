@@ -1,0 +1,16 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>"Cart" | "username"</title>
+{% endblock %}
+
+{% block content %}
+<h1>CART</h1>
+{% for product in cart_product %}
+<img src="{{product.product.image.url}}" alt="{{product.product.name}}">
+<h2>{{product.product.name}} {{product.quantity}}</h2>
+<hr>
+{% endfor %}
+
+{% endblock %}
