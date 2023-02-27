@@ -14,5 +14,10 @@
     <h3>{{product.name}}</h3>
     <h4>{{product.price}}</h4>
     <p>{{product.description}}</p>
-    <a href="{% url 'shop:add_to_cart' slug=product.slug %}">Ajouter au panier</a>
+    <form method="POST" action="{% url 'shop:add_to_cart' product.slug %}">
+        {% csrf_token %}
+        <label for="quantity">Quantité:</label>
+        <input type="number" name="quantity" value="1" min="1">
+        <button type="submit">Ajouter au panier</button>
+      </form>
 {% endblock %}

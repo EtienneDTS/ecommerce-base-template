@@ -6,11 +6,18 @@
 {% endblock %}
 
 {% block content %}
-<h1>CART</h1>
-{% for product in cart_product %}
-<img src="{{product.product.image.url}}" alt="{{product.product.name}}">
-<h2>{{product.product.name}} {{product.quantity}}</h2>
-<hr>
-{% endfor %}
+    <h1>CART</h1>
+    {% for product in cart_product %}
+    <img src="{{product.product.image.url}}" alt="{{product.product.name}}">
+    <h2>{{product.product.name}}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="quantity">Quantité</label>
+        <input type="number" name="quantity" value="{{product.quantity}}" min="0">
+        <input type="submit" value="Mettre à jour">
+    </form>
+    <a href="{% url 'shop:remove_from_cart' slug=product.product.slug %}">Retirer du panier</a>
+    <hr>
+    {% endfor %}
 
 {% endblock %}

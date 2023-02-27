@@ -72,6 +72,10 @@ class Cart(models.Model):
         cart_products = self.cartproduct_set.all()
         quantity = sum([cp.quantity for cp in cart_products])
         return quantity
+    
+    def remove_cartproduct(self, product):
+        self.products.remove(product)
+        
 
 class CartProduct(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
