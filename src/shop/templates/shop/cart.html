@@ -7,16 +7,16 @@
 
 {% block content %}
     <h1>CART</h1>
-    {% for product in cart_product %}
-    <img src="{{product.product.image.url}}" alt="{{product.product.name}}">
-    <h2>{{product.product.name}}</h2>
+    {% for cart_product in cart_products %}
+    <img src="{{cart_product.product.image.url}}" alt="{{cart_product.product.name}}">
+    <h2>{{cart_product.product.name}}</h2>
     <form method="post">
         {% csrf_token %}
         <label for="quantity">Quantité</label>
-        <input type="number" name="quantity" value="{{product.quantity}}" min="0">
+        <input type="number" name="quantity" value="{{cart_product.quantity}}" min="0">
         <input type="submit" value="Mettre à jour">
     </form>
-    <a href="{% url 'shop:remove_from_cart' slug=product.product.slug %}">Retirer du panier</a>
+    <a href="{% url 'shop:remove_from_cart' slug=cart_product.product.slug %}">Retirer du panier</a>
     <hr>
     {% endfor %}
 

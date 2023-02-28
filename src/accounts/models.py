@@ -8,3 +8,11 @@ class CustomUser(AbstractUser):
     state = models.CharField(max_length=50, blank=True)
     zip_code = models.CharField(max_length=5, blank=True)
     phone_number = models.CharField(max_length=10, blank=True)
+    
+    def __str__(self):
+        if self.username:
+            return self.username
+        else:
+            return "Anonymous"
+        
+    

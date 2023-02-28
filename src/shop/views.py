@@ -22,13 +22,19 @@ def add_to_cart(request, slug):
         quantity = int(request.POST.get('quantity'))
         if request.user.is_authenticated:
             user=request.user
+            cart, _ = Cart.objects.get_or_create(user=user)
         else:
-            #Retrieve the user's hash while waiting for them to log in.
-            user=request.session.get('_auth_user_hash')
-
-        product = get_object_or_404(Product, slug=slug)
-        cart, _ = Cart.objects.get_or_create(user=user)
-
+            if not request.session.session_key:
+                request.session.save()
+            #Retrieve the user's session_key while waiting for them to log in.
+            session_key = request.session.session_key or request.session.cycle_key()
+            print("###################")
+            print(session_key)
+            print("###################")
+            if session_key == None:
+                request.session.cycle_key()
+            cart, _ = Cart.objects.get_or_create(session_key=session_key)
+        product = get_object_or_404(Product, slug=slug)    
         cart_product, created = CartProduct.objects.get_or_create(
             cart=cart,
             product=product,
@@ -45,10 +51,14 @@ def add_to_cart(request, slug):
 def cart(request):
     if request.user.is_authenticated:
         user=request.user
+        cart = get_object_or_404(Cart, user=user)
     else:
-        #Retrieve the user's hash while waiting for them to log in.
-        user=request.session.get('_auth_user_hash')
-    cart = get_object_or_404(Cart, user=user)
+        #Retrieve the user's session_key while waiting for them to log in.
+        session_key = request.session.session_key
+        if not session_key:
+            request.session.cycle_key()
+        cart, _ = Cart.objects.get_or_create(session_key=session_key)
+        
     cart_products = cart.cartproduct_set.all()
     # Update products quantity in cart.
     if request.method == 'POST':
@@ -61,16 +71,20 @@ def cart(request):
                 cart.remove_cartproduct(cart_product.product)
                 return redirect('shop:cart')
     return render(request, "shop/cart.html", context={
-        "cart_product": cart_products,
+        "cart_products": cart_products,
     })
     
 def remove_from_cart(request, slug):
     if request.user.is_authenticated:
         user=request.user
+        cart = get_object_or_404(Cart, user=user)
     else:
         #Retrieve the user's hash while waiting for them to log in.
-        user=request.session.get('_auth_user_hash')
+        session_key = request.session.session_key
+        if not session_key:
+            request.session.cycle_key()
+        cart, _ = Cart.objects.get_or_create(session_key=session_key)
+        
     product = get_object_or_404(Product, slug=slug)
-    cart = get_object_or_404(Cart, user=user)
     cart.remove_cartproduct(product)
     return redirect('shop:cart')

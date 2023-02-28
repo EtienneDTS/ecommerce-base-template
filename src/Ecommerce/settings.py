@@ -32,6 +32,8 @@ DEBUG = env.bool("DEBUG", False)
 
 ALLOWED_HOSTS = []
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
 
 
 # Application definition

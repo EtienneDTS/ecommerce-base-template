@@ -37,7 +37,7 @@ class Product(models.Model):
         verbose_name = "Produit"
 
 # allow several images for one product        
-class ProductImage(models.Model):
+class ProductImages(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='shop', blank=True, null=True)
     
@@ -46,6 +46,7 @@ class ProductImage(models.Model):
     
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    session_key = models.CharField(max_length=40, null=True, blank=True)
     products = models.ManyToManyField(Product, through='CartProduct')
     total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -53,10 +54,11 @@ class Cart(models.Model):
     
     def __str__(self):
         if self.user:
-            return f"Cart {self.id} for user {self.user.username}"
+            return self.user.username
         else:
-            return f"Cart {self.id} for session {self.session}"
-    
+            return f"Anonymous cart ({self.session_key})"
+           
+        
      # Calculate the total amount of the cart
     @property
     def calculate_total(self):
@@ -83,7 +85,7 @@ class CartProduct(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     
     def __str__(self):
-        return f"{self.quantity} x {self.product.name} ({self.cart.id})"
+        return f"{self.quantity} x {self.product.name}"
     
 class Order(models.Model):
     # Fields for Order model
