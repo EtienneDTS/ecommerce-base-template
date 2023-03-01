@@ -20,7 +20,13 @@
                 <li><a href="{% url 'shop:home_shop' %}">shop name</a></li>
                 <li>qzdqd</li>
                 <li>qdqzd</li>
-                <li>qdzqd</li>
+                <li>
+                    {% if user.is_authenticated %} 
+                        <a href="">{{user.username}}</a>
+                    {% else %}
+                        <a href="lien vue de connection">Connexion</a>  
+                    {% endif %}
+                </li>
                 <li><a href="{% url 'shop:cart' %}">Cart</a></li>
             </ul>  
         </nav>

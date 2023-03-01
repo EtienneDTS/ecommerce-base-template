@@ -28,9 +28,6 @@ def add_to_cart(request, slug):
                 request.session.save()
             #Retrieve the user's session_key while waiting for them to log in.
             session_key = request.session.session_key or request.session.cycle_key()
-            print("###################")
-            print(session_key)
-            print("###################")
             if session_key == None:
                 request.session.cycle_key()
             cart, _ = Cart.objects.get_or_create(session_key=session_key)
