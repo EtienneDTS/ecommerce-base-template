@@ -26,5 +26,6 @@ from Ecommerce import settings
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path("", include("shop.urls", namespace="shop")),
+    path("account/", include("accounts.urls"), name="account")
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

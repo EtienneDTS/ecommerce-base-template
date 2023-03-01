@@ -1,0 +1,16 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>S'inscrire</title>
+{% endblock %}
+
+{% block content %}
+    
+    <form method="POST" action="{% url 'accounts:signup' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">S'inscrire</button>
+    </form>
+
+{% endblock %}
