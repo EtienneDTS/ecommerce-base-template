@@ -32,17 +32,7 @@ def add_to_cart(request, slug):
                 request.session.cycle_key()
             cart, _ = Cart.objects.get_or_create(session_key=session_key)
         product = get_object_or_404(Product, slug=slug)    
-        cart_product, created = CartProduct.objects.get_or_create(
-            cart=cart,
-            product=product,
-        )
-
-        if not created:
-            cart_product.quantity += quantity
-            cart_product.save()
-        else:
-            cart_product.quantity = quantity
-            cart_product.save()
+        cart.add_product(cart, product, quantity)
     return redirect('shop:cart')
 
 def cart(request):

@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import  logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 
 from .forms import SignUpForm, LoginForm
 from .models import CustomUser
+from shop.models import Cart
 
 # Create your views here.
 
@@ -37,10 +37,23 @@ class Login(LoginView):
 
     def form_valid(self, form):
         """Security check complete. Log the user in."""
+        session_key=self.request.session.session_key
+        print(session_key)
         response = super().form_valid(form)
         remember_me = form.cleaned_data['remember_me']
         if not remember_me:
-            self.request.session.set_expiry(1209600) # expire in 2 weeks
+            self.request.session.set_expiry(86400) # expire in 24 hours
+        
+        # Keep the user's cart after login
+        if session_key:
+            session_cart = Cart.objects.filter(session_key=session_key).first()
+            user_cart, _ = Cart.objects.get_or_create(user=self.request.user)
+            if session_cart and session_cart.cartproduct_set.count() > 0:
+                for cart_product in session_cart.cartproduct_set.all():
+                    product = cart_product.product
+                    quantity = cart_product.quantity
+                    user_cart.add_product(user_cart, product, quantity)
+                session_cart.delete()
         return response
     
 class Logout(LogoutView):

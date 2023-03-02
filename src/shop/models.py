@@ -46,7 +46,7 @@ class ProductImages(models.Model):
     
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
-    session_key = models.CharField(max_length=40, null=True, blank=True)
+    session_key = models.CharField(max_length=40, null=True, blank=True, unique=True)
     products = models.ManyToManyField(Product, through='CartProduct')
     total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -77,6 +77,19 @@ class Cart(models.Model):
     
     def remove_cartproduct(self, product):
         self.products.remove(product)
+        
+    def add_product(self, cart, product, quantity):
+        cart_product, created = CartProduct.objects.get_or_create(
+            cart=cart,
+            product=product,
+        )
+
+        if not created:
+            cart_product.quantity += quantity
+            cart_product.save()
+        else:
+            cart_product.quantity = quantity
+            cart_product.save()
         
 
 class CartProduct(models.Model):
