@@ -14,11 +14,15 @@ def signup(request):
         if form.is_valid():
             cleaned_data = form.cleaned_data
             password = cleaned_data.pop('password')
+            confirm_password = cleaned_data.pop('confirm_password')
             # Créer l'utilisateur avec un mot de passe crypté
-            user = CustomUser(**cleaned_data)
-            user.set_password(password)
-            user.save()
-            return redirect('shop:home_shop')
+            if password == confirm_password:
+                user = CustomUser(**cleaned_data)
+                user.set_password(password)
+                user.save()
+                return redirect('shop:home_shop')
+            else:
+                form.add_error('confirm_password', "Les mots de passe ne correspondent pas.")
     else:
         form = SignUpForm()
     return render(request, "signup.html", context={

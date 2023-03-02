@@ -6,16 +6,21 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import CustomUser
 
 class SignUpForm(forms.ModelForm):
+    confirm_password = forms.CharField(label="Confirmation du mot de passe", widget=forms.PasswordInput)
+    
     class Meta:
         model = CustomUser
         fields = [
             "first_name",
             "last_name",
             "email",
-            "phone_number",
             "username",
             "password",
         ]
+        
+        widgets = {
+            'password': forms.PasswordInput(),
+        }
     
     #all clean_data transleted in french   
     def clean_email(self):
@@ -31,6 +36,13 @@ class SignUpForm(forms.ModelForm):
         if not re.match(r'[A-Za-z0-9@#$%^&+=]+', password):
             raise forms.ValidationError("Le mot de passe doit contenir au moins un chiffre, une lettre majuscule, une lettre minuscule, un caractère spécial et avoir une longueur minimale de 8 caractères.")
         return password
+    
+    def clean_confirm_password(self):
+        password1 = self.cleaned_data.get("password")
+        password2 = self.cleaned_data.get("confirm_password")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Les mots de passe ne correspondent pas. Veuillez saisir le même mot de passe dans les deux champs.")
+        return password2
     
     def clean_username(self):
         username = self.cleaned_data.get("username")
