@@ -22,9 +22,9 @@
                 <li>qdqzd</li>
                 <li>
                     {% if user.is_authenticated %} 
-                        <a href="">{{user.username}}</a>
+                        <a href="{% url 'accounts:profile' %}">{{user.username}}</a>
                     {% else %}
-                        <a href="lien vue de connection">Connexion</a>  
+                        <a href="{% url 'accounts:login' %}">Connexion</a>  
                     {% endif %}
                 </li>
                 <li><a href="{% url 'shop:cart' %}">Cart</a></li>

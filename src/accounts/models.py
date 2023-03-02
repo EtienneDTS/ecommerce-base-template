@@ -9,6 +9,11 @@ class CustomUser(AbstractUser):
     zip_code = models.CharField(max_length=5, blank=True)
     phone_number = models.CharField(max_length=10, blank=True)
     is_email_verified = models.BooleanField(default=False)
+    email = models.EmailField(unique=True)
+    
+    EMAIL_FIELD = 'email'
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
     
     def __str__(self):
         if self.username:

@@ -4,3 +4,7 @@
 {% block title %}
     <title>Authentification</title>
 {% endblock %}
+
+{% block content %}
+    <a href="{% url 'accounts:logout' %}">Se déconnecter</a>
+{% endblock %}

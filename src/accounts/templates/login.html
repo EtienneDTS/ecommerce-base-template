@@ -4,3 +4,14 @@
 {% block title %}
     <title>Connexion</title>
 {% endblock %}
+    
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Se connecter</button>
+    </form>
+
+<hr>
+<p>Pas encore inscrit ? <a href="{% url 'accounts:signup' %}">Inscrivez-vous</a></p>
+{% endblock %}

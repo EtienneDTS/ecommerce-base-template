@@ -48,7 +48,7 @@ def add_to_cart(request, slug):
 def cart(request):
     if request.user.is_authenticated:
         user=request.user
-        cart = get_object_or_404(Cart, user=user)
+        cart, _ = Cart.objects.get_or_create(user=user)
     else:
         #Retrieve the user's session_key while waiting for them to log in.
         session_key = request.session.session_key

@@ -1,5 +1,7 @@
-from django import forms
 import re
+
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 
 from .models import CustomUser
 
@@ -37,3 +39,18 @@ class SignUpForm(forms.ModelForm):
         if not re.match(r'^\w+$', username):
             raise forms.ValidationError("Le nom d'utilisateur ne peut contenir que des lettres, des chiffres et des underscores.")
         return username
+    
+class LoginForm(AuthenticationForm):
+    remember_me = forms.BooleanField(
+        required=False,
+        initial=True,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        }),
+        label="Remember me"
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.fields['username'].label = "Adresse e-mail"
+        self.fields['password'].label = "Mot de passe"
