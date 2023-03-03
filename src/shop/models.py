@@ -96,9 +96,14 @@ class CartProduct(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    selected = models.BooleanField(default=True)
     
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
+    
+    @property
+    def total_cart_product(self):
+        return self.product.price * self.quantity
     
 class Order(models.Model):
     # Fields for Order model

@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_protect
 
 
 from .models import Product, Cart, CartProduct
@@ -50,13 +52,15 @@ def cart(request):
     # Update products quantity in cart.
     if request.method == 'POST':
         for cart_product in cart_products:
-            new_quantity = int(request.POST.get("quantity"))
-            if new_quantity > 0:
-                cart_product.quantity = new_quantity
-                cart_product.save()
-            else:
-                cart.remove_cartproduct(cart_product.product)
-                return redirect('shop:cart')
+            product_id = request.POST.get("product_id")
+            new_quantity = int(request.POST.get(f"quantity_{product_id}"))
+            if cart_product.id == int(product_id):
+                if new_quantity > 0:
+                    cart_product.quantity = new_quantity
+                    cart_product.save()
+                else:
+                    cart.remove_cartproduct(cart_product.product)
+                    return redirect('shop:cart')
     return render(request, "shop/cart.html", context={
         "cart_products": cart_products,
     })
@@ -75,3 +79,16 @@ def remove_from_cart(request, slug):
     product = get_object_or_404(Product, slug=slug)
     cart.remove_cartproduct(product)
     return redirect('shop:cart')
+
+
+def update_selected_status(request):
+    if request.method == 'POST':
+        print("salut")
+        cart_product_id = request.POST.get('cart_product_id')
+        selected = request.POST.get('selected') == 'true'
+        cart_product = get_object_or_404(CartProduct, id=cart_product_id)
+        cart_product.selected = selected
+        cart_product.save()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})

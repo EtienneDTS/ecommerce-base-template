@@ -5,19 +5,50 @@
     <title>"Cart" | "username"</title>
 {% endblock %}
 
+{% block addstylesheet %}
+    <link rel="stylesheet" href="{% static 'cart.css' %}">
+{% endblock %}
+
 {% block content %}
     <h1>CART</h1>
+    <section>
     {% for cart_product in cart_products %}
-    <img src="{{cart_product.product.image.url}}" alt="{{cart_product.product.name}}">
-    <h2>{{cart_product.product.name}}</h2>
-    <form method="post">
-        {% csrf_token %}
-        <label for="quantity">Quantité</label>
-        <input type="number" name="quantity" value="{{cart_product.quantity}}" min="0">
-        <input type="submit" value="Mettre à jour">
-    </form>
-    <a href="{% url 'shop:remove_from_cart' slug=cart_product.product.slug %}">Retirer du panier</a>
-    <hr>
+        <div class="card">
+            <div class="card-check">
+                <input type="checkbox" name="product-{{ cart_product.id }}-selected" {% if cart_product.selected %}checked{% else %}unchecked{% endif %} value="{{ cart_product.selected }}" data-url="{% url 'shop:update_selected_status' %}">
+            </div>
+            <div class="card-image">
+                <img src="{{cart_product.product.image.url}}" alt="{{cart_product.product.name}}">
+            </div>
+            <div>
+                <h3>{{cart_product.product.name}}</h3>
+                <div class="price">{{cart_product.product.price}}</div>
+                <p>Caracteristique du produit</p>
+            </div>
+            <div>
+                <form method="post">
+                    {% csrf_token %} 
+                    <label for="quantity">Quantité</label>
+                    <label for="product_id"></label>
+                    <input type="hidden" name="product_id" value="{{cart_product.id}}">
+                    <input type="number" name="quantity_{{ cart_product.id }}" value="{{cart_product.quantity}}" min="0">
+                    <input type="submit" value="Mettre à jour">
+                </form>
+                <p></p>
+                <div class="total-price">{{cart_product.total_cart_product}} €</div>
+                <a href="{% url 'shop:remove_from_cart' slug=cart_product.product.slug %}" class="remove-form-cart">Retirer du panier</a>
+            </div>
+            
+        </div>
     {% endfor %}
+    </section>
+    
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/cart.js' %}"></script>
+    <script>var csrfToken = "{{csrf_token}}";</script>
 
 {% endblock %}
