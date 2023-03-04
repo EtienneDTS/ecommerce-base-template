@@ -63,6 +63,7 @@ def cart(request):
                     return redirect('shop:cart')
     return render(request, "shop/cart.html", context={
         "cart_products": cart_products,
+        "cart": cart
     })
     
 def remove_from_cart(request, slug):

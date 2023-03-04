@@ -49,6 +49,7 @@ class Cart(models.Model):
     session_key = models.CharField(max_length=40, null=True, blank=True, unique=True)
     products = models.ManyToManyField(Product, through='CartProduct')
     total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    total_product = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(default=timezone.now)
     
@@ -63,7 +64,7 @@ class Cart(models.Model):
     @property
     def calculate_total(self):
         cart_products = self.cartproduct_set.all()
-        total = sum([cp.quantity * cp.product.price for cp in cart_products])
+        total = sum([cp.quantity * cp.product.price for cp in cart_products if cp.selected == True])
         self.total = total
         self.save()
         return total
@@ -72,7 +73,8 @@ class Cart(models.Model):
     def calculate_quantity(self):
         # Calculate the total quantity of the cart
         cart_products = self.cartproduct_set.all()
-        quantity = sum([cp.quantity for cp in cart_products])
+        quantity = sum([cp.quantity for cp in cart_products if cp.selected == True])
+        self.total_product = quantity
         return quantity
     
     def remove_cart_product(self, product):

@@ -12,9 +12,27 @@ $(document).ready(function() {
                 csrfmiddlewaretoken : csrfToken,
             },
             success: function(data) {
-                console.log(data);
+                window.location.reload();
             }
         });
     });
 });
 
+$(document).ready(function() {
+    $('.update_cart_product_quantity input[type="number"]').on('change', function() {
+      var form = $(this).closest('form');
+      var update_selected_status_url = $(this).attr('data-url');
+      console.log(update_selected_status_url)
+      $.ajax({
+        url: update_selected_status_url,
+        method: 'POST',
+        data: form.serialize(),
+        success: function(data) {
+            window.location.reload();
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+    });
+});
