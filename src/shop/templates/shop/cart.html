@@ -28,7 +28,7 @@
             <div>
                 <form method="post">
                     {% csrf_token %} 
-                    <label for="quantity">Quantité</label>
+                    <label for="quantity">Quantité :</label>
                     <label for="product_id"></label>
                     <input type="hidden" name="product_id" value="{{cart_product.id}}">
                     <input type="number" name="quantity_{{ cart_product.id }}" value="{{cart_product.quantity}}" min="0">
@@ -36,7 +36,7 @@
                 </form>
                 <p></p>
                 <div class="total-price">{{cart_product.total_cart_product}} €</div>
-                <a href="{% url 'shop:remove_from_cart' slug=cart_product.product.slug %}" class="remove-form-cart">Retirer du panier</a>
+                <a href="{% url 'shop:remove_from_cart' slug=cart_product.product.slug %}" class="remove-from-cart">Retirer du panier</a>
             </div>
             
         </div>

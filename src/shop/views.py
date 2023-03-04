@@ -59,7 +59,7 @@ def cart(request):
                     cart_product.quantity = new_quantity
                     cart_product.save()
                 else:
-                    cart.remove_cartproduct(cart_product.product)
+                    cart.remove_cart_product(cart_product.product)
                     return redirect('shop:cart')
     return render(request, "shop/cart.html", context={
         "cart_products": cart_products,
@@ -77,13 +77,12 @@ def remove_from_cart(request, slug):
         cart, _ = Cart.objects.get_or_create(session_key=session_key)
         
     product = get_object_or_404(Product, slug=slug)
-    cart.remove_cartproduct(product)
+    cart.remove_cart_product(product)
     return redirect('shop:cart')
 
 
 def update_selected_status(request):
     if request.method == 'POST':
-        print("salut")
         cart_product_id = request.POST.get('cart_product_id')
         selected = request.POST.get('selected') == 'true'
         cart_product = get_object_or_404(CartProduct, id=cart_product_id)

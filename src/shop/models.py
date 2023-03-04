@@ -75,7 +75,7 @@ class Cart(models.Model):
         quantity = sum([cp.quantity for cp in cart_products])
         return quantity
     
-    def remove_cartproduct(self, product):
+    def remove_cart_product(self, product):
         self.products.remove(product)
         
     def add_product(self, cart, product, quantity):
