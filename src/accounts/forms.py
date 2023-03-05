@@ -1,7 +1,8 @@
 import re
 
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.core.exceptions import ValidationError
 
 from .models import CustomUser
 
@@ -66,3 +67,22 @@ class LoginForm(AuthenticationForm):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['username'].label = "Adresse e-mail"
         self.fields['password'].label = "Mot de passe"
+        
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label="Ancien mot de passe",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}),
+    )
+    
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        print(password1)
+        if password1 and password2 and password1 != password2:
+            raise ValidationError("Les mots de passe ne correspondent pas.")
+        if len(password2) < 8:
+            raise ValidationError("Le mot de passe doit comporter au moins 8 caractères.")
+        if not re.match(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#$%^&+=])[A-Za-z\d@#$%^&+=]{8,}$', password2):
+            raise ValidationError("Le mot de passe doit contenir au moins un chiffre, une lettre majuscule, une lettre minuscule, un caractère spécial et avoir une longueur minimale de 8 caractères.")
+        return password2

@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 
-from .forms import SignUpForm, LoginForm
+from .forms import SignUpForm, LoginForm, CustomPasswordChangeForm
 from .models import CustomUser
 from shop.models import Cart
 
@@ -64,3 +66,17 @@ def profile(request):
     return render(request, "profile.html", context={
         
     })
+    
+    
+def change_password(request):
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            print("form valid")
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Votre mot de passe a été modifié avec succès !')
+            return redirect('accounts:profile')
+    else:
+        form = CustomPasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {'form': form})
