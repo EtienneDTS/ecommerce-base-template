@@ -1,0 +1,22 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+
+{% block content %}
+{% if review %}
+    <h2>Vous avez deja ajouté un commentaire</h2>
+    <div class="Card review">
+        <div>{{review.product.name}}</div>
+        <div>{{review.text}}</div>
+        <div>{{review.rating}}</div>
+        <a href="{% url 'shop:product_detail' slug=product.slug %}">Retour au produit</a>
+    </div>
+{% else %}
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Ajouter un commentaire</button>
+    </form>
+{% endif %}
+
+{% endblock %}

@@ -20,7 +20,7 @@
         <input type="number" name="quantity" value="1" min="1">
         <button type="submit">Ajouter au panier</button>
       </form>
-
+      <a href="{% url 'shop:add_review' slug=product.slug %}">Ajouter un commentaire</a>
 
 {% endblock %}
 

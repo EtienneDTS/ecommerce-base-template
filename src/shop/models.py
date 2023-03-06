@@ -85,13 +85,20 @@ class Cart(models.Model):
             cart=cart,
             product=product,
         )
-
         if not created:
             cart_product.quantity += quantity
             cart_product.save()
         else:
             cart_product.quantity = quantity
             cart_product.save()
+
+    def create_order(self):
+        order = Order.objects.create(user=self.user, total=self.total, quantity=self.total_product)
+
+        for cart_product in self.cartproduct_set.filter(selected=True):
+            order_product = OrderProduct.objects.create(order=order, product=cart_product.product, quantity=cart_product.quantity)
+
+        return order
         
 
 class CartProduct(models.Model):
@@ -131,3 +138,27 @@ class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    
+    
+class Review(models.Model):
+    RATING_CHOICES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    )
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews', verbose_name="Avis")
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    text = models.TextField()
+    rating = models.IntegerField(choices=RATING_CHOICES)
+    created_at = models.DateTimeField(default=timezone.now)
+    verified_purchase = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.product} - {self.user.first_name}"
+
+    class Meta:
+        verbose_name = "Avis"
+        unique_together = ('user', 'product')

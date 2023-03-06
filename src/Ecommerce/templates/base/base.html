@@ -29,7 +29,13 @@
                         <a href="{% url 'accounts:login' %}">Connexion</a>  
                     {% endif %}
                 </li>
-                <li><a href="{% url 'shop:cart' %}">Cart</a></li>
+                <li>
+                    {% if cart %}
+                        <a href="{% url 'shop:cart' %}">Cart ({{cart.calculate_quantity}})</a>
+                    {% else %}
+                        <a href="{% url 'shop:cart' %}">Cart (0)</a>
+                    {% endif %}
+                </li>
             </ul>  
         </nav>
     {% endblock %}

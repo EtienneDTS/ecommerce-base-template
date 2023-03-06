@@ -3,20 +3,31 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 
 
-from .models import Product, Cart, CartProduct
+from .models import Product, Cart, CartProduct, Review
+from .forms import ReviewForm
 
 # Create your views here.
 
 def home_view(request):
     products = Product.objects.all()
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+    else:
+        cart = Cart.objects.filter(session_key=request.session.session_key).first()
     return render(request, "shop/home_shop.html", context={
         "products": products,
+        "cart": cart,
     })
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug)
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+    else:
+        cart = Cart.objects.filter(session_key=request.session.session_key).first()
     return render(request, "shop/product_detail.html", context={
         "product": product,
+        "cart": cart,
     })
     
 def add_to_cart(request, slug):
@@ -92,3 +103,24 @@ def update_selected_status(request):
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
+    
+    
+def add_review(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    review = Review.objects.filter(product=product, user=request.user).first()
+    form = ReviewForm(request.POST)
+
+    if request.method == 'POST':
+        review = form.save(commit=False)
+        review.product = product
+        review.user = request.user
+        review.save()
+        return redirect('shop:product_detail', slug=slug)
+
+    context = {
+        'product': product,
+        'form': form,
+        'review': review,
+    }
+
+    return render(request, 'product_review/add_review.html', context)
