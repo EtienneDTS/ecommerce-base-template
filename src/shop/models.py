@@ -17,12 +17,11 @@ class Category(models.Model):
         return self.name
     
 class Product(models.Model):
+    brand = models.CharField(max_length=255, verbose_name="Marque")
     name = models.CharField(max_length=255, verbose_name="Nom")
     slug = models.SlugField(default="", blank=True, unique=True)
     description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=7, decimal_places=2, default = 0.00,verbose_name="Prix")
     image = models.ImageField(upload_to='shop', blank=True, null=True)
-    stock = models.IntegerField(default=0)
     categories = models.ManyToManyField(Category)
     
     def save(self, *args, **kwargs):
@@ -31,10 +30,14 @@ class Product(models.Model):
         super().save(*args, **kwargs)
     
     def __str__(self) -> str:
-        return self.name
+        return f"{self.brand} - {self.name}"
     
     class Meta:
         verbose_name = "Produit"
+        
+    @property    
+    def product_title(self):
+        return f"{self.brand} - {self.name}"
 
 # allow several images for one product        
 class ProductImages(models.Model):
@@ -42,7 +45,31 @@ class ProductImages(models.Model):
     image = models.ImageField(upload_to='shop', blank=True, null=True)
     
     class Meta:
-        verbose_name = "images de produit"        
+        verbose_name = "images de produit"
+        
+
+class ProductVariante(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Nom de variante")
+    variante_name = models.CharField(max_length=255, verbose_name="Nom de variante", blank=True, null=True)
+    image = models.ImageField(upload_to='shop', blank=True, null=True)
+    weight = models.CharField(max_length=255, verbose_name="Poids du produit", blank=True, null=True)
+    size = models.CharField(max_length=255, verbose_name="Taille du produit", blank=True, null=True)
+    color = models.CharField(max_length=255, verbose_name="Couleur du produit", blank=True, null=True)
+    flavour = models.CharField(max_length=255, verbose_name="Saveur du produit", blank=True, null=True)
+    stock = models.IntegerField(default=0, verbose_name="Stock")
+    price = models.DecimalField(max_digits=7, decimal_places=2, default = 0.00,verbose_name="Prix")
+    
+    class Meta:
+        verbose_name = "Variante"
+        
+    def __str__(self) -> str:
+        return f"{self.product.product_title} - {self.variante_name}"
+    
+    @property    
+    def product_variante_title(self):
+        return f"{self.variante_name}"
+        
+        
     
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
@@ -80,10 +107,11 @@ class Cart(models.Model):
     def remove_cart_product(self, product):
         self.products.remove(product)
         
-    def add_product(self, cart, product, quantity):
+    def add_product(self, cart, product, product_varitante, quantity):
         cart_product, created = CartProduct.objects.get_or_create(
             cart=cart,
             product=product,
+            product_variante=product_varitante,
         )
         if not created:
             cart_product.quantity += quantity
@@ -104,6 +132,7 @@ class Cart(models.Model):
 class CartProduct(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_variante = models.ForeignKey(ProductVariante, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     selected = models.BooleanField(default=True)
     
@@ -113,6 +142,10 @@ class CartProduct(models.Model):
     @property
     def total_cart_product(self):
         return self.product.price * self.quantity
+    
+    @property
+    def cart_product_title(self):
+        return f"{self.product.product_title} - {self.product_variante.variante_name}"
     
 class Order(models.Model):
     # Fields for Order model

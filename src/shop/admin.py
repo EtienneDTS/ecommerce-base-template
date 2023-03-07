@@ -1,5 +1,5 @@
 from django.contrib import admin
-from shop.models import Product, ProductImages, Category, CartProduct, Cart
+from shop.models import Product, ProductImages, Category, CartProduct, Cart, ProductVariante
 from accounts.models import CustomUser
 
 # Register your models here.
@@ -9,12 +9,11 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "description",
-        "price",
         "image",
     )
     
     list_editable = (
-        "price",
+        
     )
     
     list_display_links = ("name",)
@@ -22,7 +21,6 @@ class ProductAdmin(admin.ModelAdmin):
     field_labels = {
         'name': 'Nom',
         'description': 'Description',
-        'price': 'Prix',
         'image': 'Image'
     }
 
@@ -32,7 +30,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProductImages)
-class UserAdmin(admin.ModelAdmin):
+class ProductImagesAdmin(admin.ModelAdmin):
     list_display = (
         "product",
         "image",
@@ -40,14 +38,21 @@ class UserAdmin(admin.ModelAdmin):
     
 
 @admin.register(Cart)
-class UserAdmin(admin.ModelAdmin):
+class CartAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "session_key"
     )
     
 @admin.register(Category)
-class UserAdmin(admin.ModelAdmin):
+class CategorieAdmin(admin.ModelAdmin):
     list_display = (
         "name",
+    )
+    
+@admin.register(ProductVariante)
+class ProductVarianteAdmin(admin.ModelAdmin):
+    list_display = (
+        "variante_name",
+        "price"
     )

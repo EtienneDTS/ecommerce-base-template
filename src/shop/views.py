@@ -3,13 +3,22 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 
 
-from .models import Product, Cart, CartProduct, Review
+from .models import Product, Cart, CartProduct, Review, ProductVariante
 from .forms import ReviewForm
 
 # Create your views here.
 
 def home_view(request):
-    products = Product.objects.all()
+    products_variante = ProductVariante.objects.all().order_by('price')
+    product_variante_first_price = products_variante.first()
+    print(product_variante_first_price.product)
+    product_list=[]
+    products = []
+    for product_variante in products_variante:
+        if product_variante.product not in product_list:
+            products.append(product_variante)
+            product_list.append(product_variante.product)
+            
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
     else:
@@ -17,10 +26,15 @@ def home_view(request):
     return render(request, "shop/home_shop.html", context={
         "products": products,
         "cart": cart,
+        "products_variante": products_variante,
+        "product_variante_first_price": product_variante_first_price,
     })
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug)
+    product_variante = get_object_or_404(ProductVariante, product=product)
+    product_variante_first_price = product.productvariente_set.order_by('price').price.first()
+    print(product_variante_first_price)
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
     else:
@@ -28,6 +42,8 @@ def product_detail(request, slug):
     return render(request, "shop/product_detail.html", context={
         "product": product,
         "cart": cart,
+        "product_variante":product_variante,
+        "product_variante_first_price": product_variante_first_price,
     })
     
 def add_to_cart(request, slug):

@@ -11,14 +11,19 @@
 {% endblock %}
 
 {% block content %}
-    {% for product in products %}
-    <div class="card">
-        <a href="{% url 'shop:product_detail' slug=product.slug %}">
-            <img src="{{product.image.url}}" alt="L'image de l'article">
-        </a>
-        <a href="{% url 'shop:product_detail' slug=product.slug %}"><h2>{{product.name}}</h2></a>
-        <h3>{{product.price}} €</h3>
+
+{% for product in products %}
+    <h1>salut</h1>
+  <div class="product">
+    <a href="{% url 'shop:product_detail' slug=product.product.slug %}">
+        <div class="product_image"><img src="{{product.image.url}}" alt=""></div>
+    </a>
+    <div class="product-info">
+      <h2>{{ product.product.product_title }}</h2>
+      <p>A partir de : {{ product.price }} €</p>
     </div>
-    {% endfor %}
+  </div>
+{% endfor %}
+
 
 {% endblock %}
