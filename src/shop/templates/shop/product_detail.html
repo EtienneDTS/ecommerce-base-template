@@ -10,17 +10,40 @@
 {% endblock %}
 
 {% block content %}
-<img src="{{product.image.url}}" alt="{{product.name}}">
+    <img src="{{product_variant.image.url}}" alt="{{product.name}}">
     <h3>{{product.name}}</h3>
-    <h4>{{product.price}}</h4>
     <p>{{product.description}}</p>
     <form method="POST" action="{% url 'shop:add_to_cart' slug=product.slug %}">
         {% csrf_token %}
         <label for="quantity">Quantité:</label>
         <input type="number" name="quantity" value="1" min="1">
         <button type="submit">Ajouter au panier</button>
-      </form>
-      <a href="{% url 'shop:add_review' slug=product.slug %}">Ajouter un commentaire</a>
+    </form>
+    <a href="{% url 'shop:add_review' slug=product.slug %}">Ajouter un commentaire</a>
+    <hr>
+    <div class="option-container-form">
+        <form method="POST">
+            <div class="option-container-form">
+                {% if product_variant.flavor %}
+                <div class="option-for-flavors">  
+                    <label for="flavor-select">Saveur</label>
+                    <select class="form-control" id="flavor-select" name="flavor">
+                    {% for flavor in flavors %}
+                        <option value="{{ flavor }}">{{ flavor }}</option>
+                    {% endfor %}
+                    </select> 
+                </div>   
+                {% endif %}
+                
+                            
+            </div>
+            
+
+
+
+        </form>
+    </div>
+
 
 {% endblock %}
 

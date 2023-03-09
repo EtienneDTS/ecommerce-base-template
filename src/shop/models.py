@@ -48,14 +48,14 @@ class ProductImages(models.Model):
         verbose_name = "images de produit"
         
 
-class ProductVariante(models.Model):
+class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Nom de variante")
-    variante_name = models.CharField(max_length=255, verbose_name="Nom de variante", blank=True, null=True)
+    variant_name = models.CharField(max_length=255, verbose_name="Nom de variante", blank=True, null=True)
     image = models.ImageField(upload_to='shop', blank=True, null=True)
     weight = models.CharField(max_length=255, verbose_name="Poids du produit", blank=True, null=True)
     size = models.CharField(max_length=255, verbose_name="Taille du produit", blank=True, null=True)
     color = models.CharField(max_length=255, verbose_name="Couleur du produit", blank=True, null=True)
-    flavour = models.CharField(max_length=255, verbose_name="Saveur du produit", blank=True, null=True)
+    flavor = models.CharField(max_length=255, verbose_name="Saveur du produit", blank=True, null=True)
     stock = models.IntegerField(default=0, verbose_name="Stock")
     price = models.DecimalField(max_digits=7, decimal_places=2, default = 0.00,verbose_name="Prix")
     
@@ -63,11 +63,26 @@ class ProductVariante(models.Model):
         verbose_name = "Variante"
         
     def __str__(self) -> str:
-        return f"{self.product.product_title} - {self.variante_name}"
+        return f"{self.product.product_title} - {self.variant_name}"
     
     @property    
-    def product_variante_title(self):
-        return f"{self.variante_name}"
+    def product_variant_title(self):
+        return f"{self.variant_name}"
+    
+    def save(self, *args, **kwargs):
+        if not self.variant_name:
+            variant_name = ""
+            if self.flavour:
+                variant_name += f"{self.flavour} - "
+            if self.weight:
+                variant_name += f"{self.weight} - "
+            if self.size:
+                variant_name += f"{self.size} - "
+            if self.color:
+                variant_name += f"{self.color} - "
+            variant_name = variant_name.rstrip().rstrip('-')
+            self.variant_name = variant_name   
+        super().save(*args, **kwargs)
         
         
     
@@ -107,11 +122,11 @@ class Cart(models.Model):
     def remove_cart_product(self, product):
         self.products.remove(product)
         
-    def add_product(self, cart, product, product_varitante, quantity):
+    def add_product(self, cart, product, product_varitant, quantity):
         cart_product, created = CartProduct.objects.get_or_create(
             cart=cart,
             product=product,
-            product_variante=product_varitante,
+            product_variant=product_varitant,
         )
         if not created:
             cart_product.quantity += quantity
@@ -132,7 +147,7 @@ class Cart(models.Model):
 class CartProduct(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    product_variante = models.ForeignKey(ProductVariante, on_delete=models.CASCADE)
+    product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     selected = models.BooleanField(default=True)
     
@@ -145,7 +160,7 @@ class CartProduct(models.Model):
     
     @property
     def cart_product_title(self):
-        return f"{self.product.product_title} - {self.product_variante.variante_name}"
+        return f"{self.product.product_title} - {self.product_variant.variant_name}"
     
 class Order(models.Model):
     # Fields for Order model

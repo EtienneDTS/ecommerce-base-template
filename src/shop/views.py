@@ -3,38 +3,39 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 
 
-from .models import Product, Cart, CartProduct, Review, ProductVariante
+from .models import Product, Cart, CartProduct, Review, ProductVariant
 from .forms import ReviewForm
 
 # Create your views here.
 
 def home_view(request):
-    products_variante = ProductVariante.objects.all().order_by('price')
-    product_variante_first_price = products_variante.first()
-    print(product_variante_first_price.product)
+    products_variant = ProductVariant.objects.all().order_by('price')
     product_list=[]
-    products = []
-    for product_variante in products_variante:
-        if product_variante.product not in product_list:
-            products.append(product_variante)
-            product_list.append(product_variante.product)
+    first_price_variant_per_products = []
+    for product_variant in products_variant:
+        if product_variant.product not in product_list:
+            first_price_variant_per_products.append(product_variant)
+            product_list.append(product_variant.product)
             
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
     else:
         cart = Cart.objects.filter(session_key=request.session.session_key).first()
     return render(request, "shop/home_shop.html", context={
-        "products": products,
+        "first_price_variant_per_products": first_price_variant_per_products,
         "cart": cart,
-        "products_variante": products_variante,
-        "product_variante_first_price": product_variante_first_price,
+        "products_variante": products_variant,
     })
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    product_variante = get_object_or_404(ProductVariante, product=product)
-    product_variante_first_price = product.productvariente_set.order_by('price').price.first()
-    print(product_variante_first_price)
+    product_variants = ProductVariant.objects.filter(product=product).order_by("price")
+    product_variant = product_variants.first()
+    flavors = set([variant.flavor for variant in product_variants if variant.flavor])
+    print(flavors)
+    print(product_variant.flavor)
+    if request.POST == "POST":
+        pass
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
     else:
@@ -42,8 +43,9 @@ def product_detail(request, slug):
     return render(request, "shop/product_detail.html", context={
         "product": product,
         "cart": cart,
-        "product_variante":product_variante,
-        "product_variante_first_price": product_variante_first_price,
+        "product_variants":product_variants,
+        "product_variant":product_variant,
+        "flavors": flavors,
     })
     
 def add_to_cart(request, slug):
