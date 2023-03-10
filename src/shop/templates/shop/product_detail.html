@@ -21,8 +21,10 @@
     </form>
     <a href="{% url 'shop:add_review' slug=product.slug %}">Ajouter un commentaire</a>
     <hr>
+
     <div class="option-container-form">
-        <form method="POST">
+        <form method="POST" data-url="{% url 'shop:product_detail' slug=product.slug %}" class="update_product_detail_variant">
+            {% csrf_token %}
             <div class="option-container-form">
                 {% if product_variant.flavor %}
                 <div class="option-for-flavors">  
@@ -34,7 +36,41 @@
                     </select> 
                 </div>   
                 {% endif %}
-                
+                {% if product_variant.weight %}
+                <div class="option-for-weight">
+                    <label for="weight-select">Poids:</label>
+                    <div class="weight-buttons">
+                        {% for weight in  weights %}
+                            <button type="button" class="btn btn-outline-secondary weight-button" data-value="{{ weight }}">{{ weight }}</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" id="selected-weight" name="weight" value="{{ product_variant.weight }}">
+                </div>
+                {% endif %}
+
+                {% if product_variant.color %}
+                <div class="option-for-color">
+                    <label for="color-select">Poids:</label>
+                    <div class="color-buttons">
+                        {% for color in  colors %}
+                            <button type="button" class="btn btn-outline-secondary color-button" data-value="{{ color }}">{{ color }}</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" id="selected-color" name="color" value="{{ product_variant.color }}">
+                </div>
+                {% endif %}
+
+                {% if product_variant.size %}
+                <div class="option-for-size">
+                    <label for="size-select">Poids:</label>
+                    <div class="size-buttons">
+                        {% for size in  sizes %}
+                            <button type="button" class="btn btn-outline-secondary size-button" data-value="{{ size }}">{{ size }}</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" id="selected-size" name="size" value="{{ product_variant.size }}">
+                </div>
+                {% endif %}
                             
             </div>
             
@@ -48,3 +84,9 @@
 {% endblock %}
 
 
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/product_detail.js' %}"></script>
+    <script>var csrfToken = "{{csrf_token}}";</script>
+
+{% endblock %}

@@ -28,14 +28,19 @@ def home_view(request):
     })
 
 def product_detail(request, slug):
+    if request.POST == "POST":
+        flavor = request.POST.get('flavor')
+        weights = set([variant.weight for variant in product_variants if variant.weight and variant.flavor == flavor])
+    print("bonjour")
     product = get_object_or_404(Product, slug=slug)
     product_variants = ProductVariant.objects.filter(product=product).order_by("price")
     product_variant = product_variants.first()
     flavors = set([variant.flavor for variant in product_variants if variant.flavor])
-    print(flavors)
-    print(product_variant.flavor)
-    if request.POST == "POST":
-        pass
+    weights = set([variant.weight for variant in product_variants if variant.weight and variant.flavor == product_variant.flavor])
+    colors = set([variant.color for variant in product_variants if variant.color])
+    sizes = set([variant.size for variant in product_variants if variant.size and variant.size == product_variant.color])
+    
+    
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
     else:
@@ -43,9 +48,12 @@ def product_detail(request, slug):
     return render(request, "shop/product_detail.html", context={
         "product": product,
         "cart": cart,
-        "product_variants":product_variants,
-        "product_variant":product_variant,
+        "product_variants": product_variants,
+        "product_variant": product_variant,
         "flavors": flavors,
+        "weights": weights,
+        "colors": colors,
+        "sizes": sizes,
     })
     
 def add_to_cart(request, slug):

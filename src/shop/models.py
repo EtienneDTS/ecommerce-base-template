@@ -84,6 +84,17 @@ class ProductVariant(models.Model):
             self.variant_name = variant_name   
         super().save(*args, **kwargs)
         
+    def get_weights_with_flavor(self, flavor):
+        """
+        Returns a set of all weights for product variants with the given flavor.
+        """
+        weights = set()
+        variants_with_flavor = self.variants.filter(flavor=flavor)
+        for variant in variants_with_flavor:
+            if variant.weight:
+                weights.add(variant.weight)
+        return weights
+        
         
     
 class Cart(models.Model):
