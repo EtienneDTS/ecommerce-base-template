@@ -15,38 +15,53 @@
 //     });
 // });
 
-const weightButtons = document.querySelectorAll('.weight-button');
-const selectedWeightInput = document.querySelector('#selected-weight');
+function selectButton(button) {
+    // Désélectionne tous les boutons dans le même groupe que le bouton cliqué
+    var group = button.closest('.option-buttons');
+    group.find('.btn').removeClass('active');
+    
+    // Sélectionne le bouton cliqué
+    button.addClass('active');
+    
+    // Met à jour la valeur du champ caché
+    var hiddenInput = group.find('input[type=hidden]');
+    hiddenInput.val(button.data('value'));
+    console.log(hiddenInput.val(button.data('value')))
+  }
 
-weightButtons.forEach(button => {
-    button.addEventListener('click', (event) => {
-        // Set the value of the selected weight input to the data-value of the clicked button
-        selectedWeightInput.value = event.target.getAttribute('data-value');
+  $('.option-buttons .btn').on('click', function() {
+    selectButton($(this));
+  });
 
-        // Remove the "active" class from all weight buttons
-        weightButtons.forEach(button => {
-            button.classList.remove('active');
-        });
-        // Add the "active" class to the clicked button
-        event.target.classList.add('active');
+  $('.update_product_detail_variant select[class="form-control"]').on('change', function() {
+    var form = $(this).closest('form');
+    var data_url = $(this).attr('data-url');
+    console.log(data_url)
+    var hiddenInputs = form.find('input[type="hidden"]');
+    var formData = form.serializeArray();
+    $.each(hiddenInputsData, function(index, item) {
+        formData.push(item);
     });
-});
-
-$(document).ready(function() {
-    $('.update_product_detail_variant select[class="form-control"]').on('change', function() {
-      var form = $(this).closest('form');
-      var data_url = $(this).attr('data-url');
-      console.log(data_url)
-      $.ajax({
+    console.log(formData)
+    
+    $.ajax({
         url: data_url,
         method: 'POST',
-        data: form.serialize(),
+        data: {
+            csrfmiddlewaretoken : csrfToken,
+        },
         success: function(data) {
-            window.location.reload();
+            console.log(data)
         },
         error: function(error) {
           console.log(error);
         }
-      });
     });
 });
+
+
+
+
+
+
+

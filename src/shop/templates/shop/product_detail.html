@@ -12,6 +12,7 @@
 {% block content %}
     <img src="{{product_variant.image.url}}" alt="{{product.name}}">
     <h3>{{product.name}}</h3>
+    <span>{{product_variant.price}} €</span>
     <p>{{product.description}}</p>
     <form method="POST" action="{% url 'shop:add_to_cart' slug=product.slug %}">
         {% csrf_token %}
@@ -23,7 +24,7 @@
     <hr>
 
     <div class="option-container-form">
-        <form method="POST" data-url="{% url 'shop:product_detail' slug=product.slug %}" class="update_product_detail_variant">
+        <form method="POST" data-url="{% url 'shop:product_detail' slug=product.slug variant_slug=product_variant.variant_slug %}" class="update_product_detail_variant">
             {% csrf_token %}
             <div class="option-container-form">
                 {% if product_variant.flavor %}
@@ -36,15 +37,15 @@
                     </select> 
                 </div>   
                 {% endif %}
-                {% if product_variant.weight %}
-                <div class="option-for-weight">
-                    <label for="weight-select">Poids:</label>
-                    <div class="weight-buttons">
-                        {% for weight in  weights %}
-                            <button type="button" class="btn btn-outline-secondary weight-button" data-value="{{ weight }}">{{ weight }}</button>
+                {% if product_variant.option %}
+                <div class="option-for-option">
+                    <label for="option-select">{{ option_name }}</label>
+                    <div class="option-buttons">
+                        {% for option in  options %}
+                        <button type="button" class="btn btn-outline-secondary size-button{% if selected_option == option %} active{% endif %}" data-value="{{ option }}">{{ option }}</button>
                         {% endfor %}
                     </div>
-                    <input type="hidden" id="selected-weight" name="weight" value="{{ product_variant.weight }}">
+                    <input type="hidden" id="selected-option" name="option" value="{{ product_variant.option }}">
                 </div>
                 {% endif %}
 
@@ -60,17 +61,7 @@
                 </div>
                 {% endif %}
 
-                {% if product_variant.size %}
-                <div class="option-for-size">
-                    <label for="size-select">Poids:</label>
-                    <div class="size-buttons">
-                        {% for size in  sizes %}
-                            <button type="button" class="btn btn-outline-secondary size-button" data-value="{{ size }}">{{ size }}</button>
-                        {% endfor %}
-                    </div>
-                    <input type="hidden" id="selected-size" name="size" value="{{ product_variant.size }}">
-                </div>
-                {% endif %}
+            
                             
             </div>
             

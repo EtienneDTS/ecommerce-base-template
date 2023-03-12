@@ -48,14 +48,25 @@ class ProductImages(models.Model):
         verbose_name = "images de produit"
         
 
+class OptionName(models.Model):
+    name = models.CharField(max_length=50)  
+    
+    class Meta:
+        verbose_name = "Nom de l'option de produit"   
+        
+    def __str__(self) -> str:
+        return self.name   
+    
+    
 class ProductVariant(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Nom de variante")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Nom du produit")
+    variant_slug = models.SlugField(default="", blank=True, verbose_name="Slug de la variante")
     variant_name = models.CharField(max_length=255, verbose_name="Nom de variante", blank=True, null=True)
     image = models.ImageField(upload_to='shop', blank=True, null=True)
-    weight = models.CharField(max_length=255, verbose_name="Poids du produit", blank=True, null=True)
-    size = models.CharField(max_length=255, verbose_name="Taille du produit", blank=True, null=True)
     color = models.CharField(max_length=255, verbose_name="Couleur du produit", blank=True, null=True)
     flavor = models.CharField(max_length=255, verbose_name="Saveur du produit", blank=True, null=True)
+    option_name = models.ForeignKey(OptionName, on_delete=models.CASCADE, verbose_name="Nom de l'option", blank=True, null=True)
+    option = models.CharField(max_length=255, verbose_name="Option", blank=True, null=True)
     stock = models.IntegerField(default=0, verbose_name="Stock")
     price = models.DecimalField(max_digits=7, decimal_places=2, default = 0.00,verbose_name="Prix")
     
@@ -72,28 +83,35 @@ class ProductVariant(models.Model):
     def save(self, *args, **kwargs):
         if not self.variant_name:
             variant_name = ""
-            if self.flavour:
-                variant_name += f"{self.flavour} - "
-            if self.weight:
-                variant_name += f"{self.weight} - "
-            if self.size:
-                variant_name += f"{self.size} - "
+            if self.flavor:
+                variant_name += f"{self.flavor} - "
             if self.color:
                 variant_name += f"{self.color} - "
-            variant_name = variant_name.rstrip().rstrip('-')
-            self.variant_name = variant_name   
+            if self.option:
+                variant_name += f"{self.option} - "
+        variant_name = variant_name.rstrip().rstrip('-')
+        self.variant_name = variant_name 
+        if not self.variant_slug:
+            self.variant_slug = slugify(self.variant_name)  
         super().save(*args, **kwargs)
         
-    def get_weights_with_flavor(self, flavor):
+    def get_options_for_product_variant(self):
         """
-        Returns a set of all weights for product variants with the given flavor.
+        Returns a set of all options for product variants with the given flavor or color.
         """
-        weights = set()
-        variants_with_flavor = self.variants.filter(flavor=flavor)
-        for variant in variants_with_flavor:
-            if variant.weight:
-                weights.add(variant.weight)
-        return weights
+        product_variants = ProductVariant.objects.filter(product=self.product)
+        if self.flavor:
+            options = set([variant.option for variant in product_variants if variant.flavor and variant.flavor == self.flavor])
+            return options    
+            
+        if self.color:
+            options = set([variant.option for variant in product_variants if variant.color and variant.color == self.color])
+            return options
+        
+        options = set([variant.option for variant in product_variants])
+        print("salut")
+            
+        return options
         
         
     
@@ -105,6 +123,9 @@ class Cart(models.Model):
     total_product = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(default=timezone.now)
+    
+    class Meta:
+        verbose_name = "Panier"
     
     def __str__(self):
         if self.user:

@@ -24,37 +24,84 @@ def home_view(request):
     return render(request, "shop/home_shop.html", context={
         "first_price_variant_per_products": first_price_variant_per_products,
         "cart": cart,
-        "products_variante": products_variant,
+        "products_variant": products_variant,
     })
 
-def product_detail(request, slug):
-    if request.POST == "POST":
-        flavor = request.POST.get('flavor')
-        weights = set([variant.weight for variant in product_variants if variant.weight and variant.flavor == flavor])
+def product_detail(request, slug, variant_slug):
     print("bonjour")
     product = get_object_or_404(Product, slug=slug)
+    if request.method == "POST":
+        color = request.POST.get("color")
+        flavor = request.POST.get("flavor")
+        option = request.POST.get("option")
+        if flavor != None:
+            product_variant = get_object_or_404(ProductVariant, product=product, flavor=flavor, option=option)
+        if color != None:
+            product_variant = get_object_or_404(ProductVariant, product=product, color=color, option=option)
+        options = product_variant.get_options_for_product_variant()
+    else :
+        product_variant = get_object_or_404(ProductVariant, variant_slug=variant_slug)
+        print("else")
+    print(product_variant)
     product_variants = ProductVariant.objects.filter(product=product).order_by("price")
-    product_variant = product_variants.first()
     flavors = set([variant.flavor for variant in product_variants if variant.flavor])
-    weights = set([variant.weight for variant in product_variants if variant.weight and variant.flavor == product_variant.flavor])
     colors = set([variant.color for variant in product_variants if variant.color])
-    sizes = set([variant.size for variant in product_variants if variant.size and variant.size == product_variant.color])
-    
+    options = product_variant.get_options_for_product_variant()
     
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
     else:
         cart = Cart.objects.filter(session_key=request.session.session_key).first()
-    return render(request, "shop/product_detail.html", context={
+    
+    context={
         "product": product,
         "cart": cart,
         "product_variants": product_variants,
         "product_variant": product_variant,
         "flavors": flavors,
-        "weights": weights,
+        "options": options,
         "colors": colors,
-        "sizes": sizes,
-    })
+        "option_name": product_variant.option_name,
+    } 
+    
+        
+    return render(request, "shop/product_detail.html", context)
+
+def product_detail_with_option(request, slug, variant_slug):
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+    else:
+        cart = Cart.objects.filter(session_key=request.session.session_key).first()
+    
+    if request.method == "POST":
+        
+        product = get_object_or_404(Product, slug=slug)
+        product_variants = ProductVariant.objects.filter(product=product).order_by("price")
+        flavors = set([variant.flavor for variant in product_variants if variant.flavor])
+        colors = set([variant.color for variant in product_variants if variant.color])
+        color = request.POST.get("color")
+        flavor = request.POST.get("flavor")
+        option = request.POST.get("option")
+        if flavor != None:
+            product_variant = get_object_or_404(ProductVariant, product=product, flavor=flavor, option=option)
+        if color != None:
+            product_variant = get_object_or_404(ProductVariant, product=product, color=color, option=option)
+        options = product_variant.get_options_for_product_variant()
+        
+
+        context={
+            "product": product,
+            "cart": cart,
+            "product_variants": product_variants,
+            "product_variant": product_variant,
+            "flavors": flavors,
+            "options": options,
+            "colors": colors,
+            "option_name": product_variant.option_name,
+            "price": product_variant.price
+        } 
+        return render(request, "shop/product_detail.html", context)
+
     
 def add_to_cart(request, slug):
     if request.method == 'POST':
