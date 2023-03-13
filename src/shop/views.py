@@ -39,6 +39,7 @@ def product_detail(request, slug, variant_slug):
         if color != None:
             product_variant = get_object_or_404(ProductVariant, product=product, color=color, option=option)
         options = product_variant.get_options_for_product_variant()
+        return redirect('shop:home_shop')
     else :
         product_variant = get_object_or_404(ProductVariant, variant_slug=variant_slug)
         print("else")
@@ -64,17 +65,17 @@ def product_detail(request, slug, variant_slug):
         "option_name": product_variant.option_name,
     } 
     
-        
+    print(context["flavors"])    
     return render(request, "shop/product_detail.html", context)
 
-def product_detail_with_option(request, slug, variant_slug):
+def product_detail_with_option(request, slug):
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
     else:
         cart = Cart.objects.filter(session_key=request.session.session_key).first()
     
     if request.method == "POST":
-        
+        print("post")
         product = get_object_or_404(Product, slug=slug)
         product_variants = ProductVariant.objects.filter(product=product).order_by("price")
         flavors = set([variant.flavor for variant in product_variants if variant.flavor])
@@ -86,6 +87,7 @@ def product_detail_with_option(request, slug, variant_slug):
             product_variant = get_object_or_404(ProductVariant, product=product, flavor=flavor, option=option)
         if color != None:
             product_variant = get_object_or_404(ProductVariant, product=product, color=color, option=option)
+        
         options = product_variant.get_options_for_product_variant()
         
 

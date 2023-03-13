@@ -1,5 +1,96 @@
-.btn-outline-secondary.active {
-    background-color: #007bff;
-    border-color: #007bff;
+.btn {
+    display: inline-block;
+    border-radius: 3px;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    background-color: #f2f2f2;
+    color: #444;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  
+  .btn.active,
+  .btn:hover {
+    background-color: #444;
+    color: #f2f2f2;
+  }
+  
+  .btn:active {
+    background-color: #999;
+    color: #fff;
+    box-shadow: none;
+  }
+
+
+/* for selector */
+/* Style de base pour le conteneur d'options */
+.option-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  /* Style de base pour le label */
+  .option-for-flavors label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  /* Style de base pour la sélection */
+  .flavor-selector {
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #f2f2f2;
+    color: #444;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  /* Style du survol pour la sélection */
+  .flavor-selector:hover {
+    background-color: #ddd;
+  }
+  
+  /* Style de pression pour la sélection */
+  .flavor-selector:active {
+    background-color: #999;
+    color: #fff;
+  }
+  
+  /* Style pour la flèche déroulante */
+  .flavor-selector::-ms-expand {
+    display: none;
+  }
+  
+  .flavor-selector::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #444;
+    transform: translateY(-50%);
+  }
+  
+  /* Style pour les options de la sélection */
+  .flavor-selector option {
+    background-color: #fff;
+    color: #444;
+  }
+  
+  /* Style pour l'option sélectionnée */
+  .flavor-selector option:checked {
+    background-color: #444;
     color: #fff;
   }
