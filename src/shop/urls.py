@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 
-from .views import home_view, product_detail, add_to_cart, cart, remove_from_cart, update_selected_status, add_review, product_detail_with_option
+from .views import home_view, product_detail, add_to_cart, cart, remove_from_cart, update_selected_status, add_review, get_product_variant_url
 from Ecommerce import settings
 
 
@@ -11,7 +11,7 @@ app_name = "shop"
 urlpatterns = [
     path("shop/", home_view, name="home_shop"),
     path("shop/<str:slug>/<str:variant_slug>", product_detail, name="product_detail"),
-    path("shop/<str:slug>/", product_detail_with_option, name="product_detail_with_option"),
+    path("shop/<str:slug>/", get_product_variant_url, name="get_product_variant_url"),
     path("add-to-cart-<str:slug>", add_to_cart, name="add_to_cart"),
     path("cart/", cart, name="cart"),
     path("remove-<str:slug>/", remove_from_cart, name="remove_from_cart"),

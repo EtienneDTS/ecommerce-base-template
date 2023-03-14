@@ -28,23 +28,9 @@ def home_view(request):
     })
 
 def product_detail(request, slug, variant_slug):
-    print("bonjour")
     product = get_object_or_404(Product, slug=slug)
-    if request.method == "POST":
-        color = request.POST.get("color")
-        flavor = request.POST.get("flavor")
-        option = request.POST.get("option")
-        if flavor != None:
-            product_variant = get_object_or_404(ProductVariant, product=product, flavor=flavor, option=option)
-        if color != None:
-            product_variant = get_object_or_404(ProductVariant, product=product, color=color, option=option)
-        options = product_variant.get_options_for_product_variant()
-        return redirect('shop:home_shop')
-    else :
-        product_variant = get_object_or_404(ProductVariant, variant_slug=variant_slug)
-        print("else")
-    print(product_variant)
     product_variants = ProductVariant.objects.filter(product=product).order_by("price")
+    product_variant = get_object_or_404(ProductVariant, variant_slug=variant_slug)
     flavors = set([variant.flavor for variant in product_variants if variant.flavor])
     colors = set([variant.color for variant in product_variants if variant.color])
     options = product_variant.get_options_for_product_variant()
@@ -103,8 +89,23 @@ def product_detail_with_option(request, slug):
             "price": product_variant.price
         } 
         return render(request, "shop/product_detail.html", context)
-
     
+def get_product_variant_url(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    print("salut la famille")
+    if request.method == "POST":
+        if request.POST.get("color") != None:
+            color = request.POST.get("color")
+            product_variant = ProductVariant.objects.filter(product=product, color=color).order_by("price").first()
+            data = {'url': product_variant.variant_slug}
+            return JsonResponse(data)
+        if request.POST.get("flavor") != None:    
+            flavor = request.POST.get("flavor")
+            product_variant = ProductVariant.objects.filter(product=product, flavor=flavor).order_by("price").first()
+            data = {'url': product_variant.variant_slug}
+            return JsonResponse(data)
+            
+        
 def add_to_cart(request, slug):
     if request.method == 'POST':
         quantity = int(request.POST.get('quantity'))
