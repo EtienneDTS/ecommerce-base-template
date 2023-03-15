@@ -59,6 +59,7 @@
         var csrfToken = "{{csrf_token}}";
         var default_selected_option = "{{product_variant.option}}";
         var get_variant_view_url = "{% url 'shop:get_product_variant_url' slug=product.slug %}"
+        var update_variant_detail = "{% url 'shop:update_variant_detail' slug=product.slug %}"
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/product_detail.js' %}"></script>

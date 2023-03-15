@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
+from django.urls import reverse
 
 
 from .models import Product, Cart, CartProduct, Review, ProductVariant
@@ -30,7 +31,7 @@ def home_view(request):
 def product_detail(request, slug, variant_slug):
     product = get_object_or_404(Product, slug=slug)
     product_variants = ProductVariant.objects.filter(product=product).order_by("price")
-    product_variant = get_object_or_404(ProductVariant, variant_slug=variant_slug)
+    product_variant = get_object_or_404(ProductVariant, variant_slug=variant_slug, product = product)
     flavors = set([variant.flavor for variant in product_variants if variant.flavor])
     colors = set([variant.color for variant in product_variants if variant.color])
     options = product_variant.get_options_for_product_variant()
@@ -54,57 +55,39 @@ def product_detail(request, slug, variant_slug):
     print(context["flavors"])    
     return render(request, "shop/product_detail.html", context)
 
-def product_detail_with_option(request, slug):
-    if request.user.is_authenticated:
-        cart = Cart.objects.filter(user=request.user).first()
-    else:
-        cart = Cart.objects.filter(session_key=request.session.session_key).first()
-    
-    if request.method == "POST":
-        print("post")
-        product = get_object_or_404(Product, slug=slug)
-        product_variants = ProductVariant.objects.filter(product=product).order_by("price")
-        flavors = set([variant.flavor for variant in product_variants if variant.flavor])
-        colors = set([variant.color for variant in product_variants if variant.color])
-        color = request.POST.get("color")
-        flavor = request.POST.get("flavor")
-        option = request.POST.get("option")
-        if flavor != None:
-            product_variant = get_object_or_404(ProductVariant, product=product, flavor=flavor, option=option)
-        if color != None:
-            product_variant = get_object_or_404(ProductVariant, product=product, color=color, option=option)
-        
-        options = product_variant.get_options_for_product_variant()
-        
-
-        context={
-            "product": product,
-            "cart": cart,
-            "product_variants": product_variants,
-            "product_variant": product_variant,
-            "flavors": flavors,
-            "options": options,
-            "colors": colors,
-            "option_name": product_variant.option_name,
-            "price": product_variant.price
-        } 
-        return render(request, "shop/product_detail.html", context)
     
 def get_product_variant_url(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    print("salut la famille")
     if request.method == "POST":
         if request.POST.get("color") != None:
             color = request.POST.get("color")
             product_variant = ProductVariant.objects.filter(product=product, color=color).order_by("price").first()
-            data = {'url': product_variant.variant_slug}
-            return JsonResponse(data)
+            print(product_variant.variant_slug)
+            url = reverse('shop:product_detail', args=[product.slug, product_variant.variant_slug])
+            data = {'url': url}
         if request.POST.get("flavor") != None:    
             flavor = request.POST.get("flavor")
             product_variant = ProductVariant.objects.filter(product=product, flavor=flavor).order_by("price").first()
-            data = {'url': product_variant.variant_slug}
-            return JsonResponse(data)
-            
+            print(product_variant.variant_slug)
+            url = reverse('shop:product_detail', args=[product.slug, product_variant.variant_slug])
+            data = {'url': url}
+        return JsonResponse(data)
+    
+def update_variant_detail(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    flavor = None
+    color = None
+    print("bonjour")
+    if request.method == "POST":
+        print("salut")
+        if request.POST.get("flavor") != None:    
+            flavor = request.POST.get("flavor")
+        if request.POST.get("flavor") != None:    
+            flavor = request.POST.get("flavor")
+        option = request.POST.get("option")
+        product_variant = get_object_or_404(ProductVariant, product=product, option=option, flavor=flavor, color=color)
+        data = {"product_variant":product_variant}   
+        return JsonResponse(data)
         
 def add_to_cart(request, slug):
     if request.method == 'POST':

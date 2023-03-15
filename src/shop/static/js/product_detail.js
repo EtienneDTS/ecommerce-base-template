@@ -1,19 +1,3 @@
-// $('#add-to-cart-form').on('submit', function(event) {
-//     event.preventDefault();
-//     var form = $(this);
-//     var url = form.attr('action');
-//     var data = form.serialize();
-//     $.ajax({
-//         url: url,
-//         type: 'POST',
-//         data: data,
-//         success: function(response) {
-//             if (response.success) {
-                
-//             }
-//         }
-//     });
-// });
 
 var flavor_selector = document.getElementById("flavor-select");
 var option_buttons = document.querySelectorAll('.option-for-option button');
@@ -22,9 +6,6 @@ var hiddenInput = document.querySelector("#selected-option");
 hiddenInput.value = default_selected_option
 console.log(hiddenInput.value)
 
-function redirectToVariantUrl(url) {
-  window.location.href = url;
-}
 
 for (var i = 0; i < option_buttons.length; i++) {
     option_buttons[i].addEventListener('click', function(event) {
@@ -39,7 +20,24 @@ for (var i = 0; i < option_buttons.length; i++) {
       
       // Met à jour la valeur du champ caché
       hiddenInput.value = event.target.dataset.value;
+      
       console.log(hiddenInput.value)
+      $.ajax({
+        url: update_variant_detail,
+        type: "POST",
+        data: {
+          csrfmiddlewaretoken: csrfToken,
+          flavor: flavor_selector.value,
+          option: hiddenInput.value
+        },
+        success: function(data) {
+          // Met à jour l'image du produit
+          document.querySelector('img').src = data.product_variant.image;
+    
+          // Met à jour le prix du produit
+          document.querySelector('span').textContent = data.product_variant.price + " €";
+        }
+      });
     });
   }
 
@@ -51,9 +49,9 @@ flavor_selector.addEventListener("change", ()=>{
       flavor: flavor_selector_value,
       csrfmiddlewaretoken : csrfToken,
     }, function(data) {
-      var variant_slug = variant_url.replace("", data.url);
-      console.log(new_url)
-      redirectToVariantUrl(new_url);
+      var new_url = window.location.origin + data.url;
+      history.replaceState(null, null, new_url);
+      window.location.reload();
     });
   });
 
