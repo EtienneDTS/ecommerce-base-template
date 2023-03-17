@@ -86,11 +86,17 @@ def update_variant_detail(request, slug):
             flavor = request.POST.get("flavor")
         option = request.POST.get("option")
         product_variant = get_object_or_404(ProductVariant, product=product, option=option, flavor=flavor, color=color)
-        data = {"product_variant":product_variant}   
+        data = {
+            "image_url": product_variant.image.url,
+            "price": product_variant.price,
+            "slug": product_variant.variant_slug,
+            }   
         return JsonResponse(data)
         
 def add_to_cart(request, slug):
     if request.method == 'POST':
+        variant_slug = request.POST.get("variant_slug")
+        print(variant_slug)
         quantity = int(request.POST.get('quantity'))
         if request.user.is_authenticated:
             user=request.user
@@ -103,8 +109,9 @@ def add_to_cart(request, slug):
             if session_key == None:
                 request.session.cycle_key()
             cart, _ = Cart.objects.get_or_create(session_key=session_key)
-        product = get_object_or_404(Product, slug=slug)    
-        cart.add_product(cart, product, quantity)
+        product = get_object_or_404(Product, slug=slug)
+        product_variant = get_object_or_404(ProductVariant, product=product, variant_slug=variant_slug)    
+        cart.add_product(cart, product, product_variant, quantity)
     return redirect('shop:cart')
 
 def cart(request):
@@ -136,7 +143,7 @@ def cart(request):
         "cart": cart
     })
     
-def remove_from_cart(request, slug):
+def remove_from_cart(request, slug, variant_slug):
     if request.user.is_authenticated:
         user=request.user
         cart = get_object_or_404(Cart, user=user)
@@ -148,7 +155,8 @@ def remove_from_cart(request, slug):
         cart, _ = Cart.objects.get_or_create(session_key=session_key)
         
     product = get_object_or_404(Product, slug=slug)
-    cart.remove_cart_product(product)
+    product_variant = get_object_or_404(ProductVariant, product=product, variant_slug=variant_slug)
+    cart.remove_cart_product(product=product, product_variant=product_variant)
     return redirect('shop:cart')
 
 

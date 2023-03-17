@@ -2,6 +2,7 @@ from django.db import models
 from django.db import models
 from django.utils.text import slugify
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
 from accounts.models import CustomUser
 # Create your models here.
@@ -108,9 +109,7 @@ class ProductVariant(models.Model):
             options = set([variant.option for variant in product_variants if variant.color and variant.color == self.color])
             return options
         
-        options = set([variant.option for variant in product_variants])
-        print("salut")
-            
+        options = set([variant.option for variant in product_variants])  
         return options
         
         
@@ -138,7 +137,7 @@ class Cart(models.Model):
     @property
     def calculate_total(self):
         cart_products = self.cartproduct_set.all()
-        total = sum([cp.quantity * cp.product.price for cp in cart_products if cp.selected == True])
+        total = sum([cp.quantity * cp.product_variant.price for cp in cart_products if cp.selected == True])
         self.total = total
         self.save()
         return total
@@ -151,8 +150,9 @@ class Cart(models.Model):
         self.total_product = quantity
         return quantity
     
-    def remove_cart_product(self, product):
-        self.products.remove(product)
+    def remove_cart_product(self, product, product_variant):
+        cart_product = get_object_or_404(CartProduct, product=product, product_variant=product_variant)
+        cart_product.delete()
         
     def add_product(self, cart, product, product_varitant, quantity):
         cart_product, created = CartProduct.objects.get_or_create(
@@ -188,7 +188,7 @@ class CartProduct(models.Model):
     
     @property
     def total_cart_product(self):
-        return self.product.price * self.quantity
+        return self.product_variant.price * self.quantity
     
     @property
     def cart_product_title(self):

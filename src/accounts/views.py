@@ -53,8 +53,9 @@ class Login(LoginView):
             if session_cart and session_cart.cartproduct_set.count() > 0:
                 for cart_product in session_cart.cartproduct_set.all():
                     product = cart_product.product
+                    product_variant = cart_product.product_variant
                     quantity = cart_product.quantity
-                    user_cart.add_product(user_cart, product, quantity)
+                    user_cart.add_product(user_cart, product, product_variant, quantity)
                 session_cart.delete()
         return response
     

@@ -10,49 +10,57 @@
 {% endblock %}
 
 {% block content %}
-    <img src="{{product_variant.image.url}}" alt="{{product.name}}">
-    <h3>{{product.name}}</h3>
-    <span>{{product_variant.price}} €</span>
-    <p>{{product.description}}</p>
-    <form method="POST" action="{% url 'shop:add_to_cart' slug=product.slug %}">
-        {% csrf_token %}
-        <label for="quantity">Quantité:</label>
-        <input type="number" name="quantity" value="1" min="1">
-        <button type="submit">Ajouter au panier</button>
-    </form>
-    <a href="{% url 'shop:add_review' slug=product.slug %}">Ajouter un commentaire</a>
-    <hr>
-
-    <div class="option-container">
-        <div class="option-container">
-            {% if product_variant.flavor %}
-            <div class="option-for-flavors">  
-                <label for="flavor-select">Saveur</label>
-                <select class="flavor-selector"id="flavor-select" name="flavor">
-                {% for flavor in flavors %}
-                <option value="{{ flavor }}" {% if flavor == product_variant.flavor %}selected{% endif %}>{{ flavor }}</option>
-                {% endfor %}
-                </select> 
-            </div>
-            {% endif %}
-        {% if product_variant.option %}
-            <div class="option-for-option">
-                <label for="option-select">{{option_name }}</label>
-                <div class="option-buttons">
-                {% for option in  options %}
-                <button type="button" data-value="{{ option }}" class="btn {% if option == product_variant.option %}active{% endif %}">{{option }}</button>
-                {% endfor %}
-                </div>
-                <input type="hidden" id="selected-option" name="option" value="{{ product_variantoption }}">
-            </div>
-        {% endif %}
-        
-                        
+    <div class="product-details">
+        <div class="product-details__image">
+            <img src="{{product_variant.image.url}}" alt="{{product.name}}">
         </div>
-
-
+        <div class="product-details__info">
+            <h3 class="product-details__name">{{product.name}}</h3>
+            <div class="product-details__price">
+                <span>{{product_variant.price}} €</span>
+            </div>
+            <div class="product-details__options">
+                <div class="product-details__option">
+                    {% if product_variant.flavor %}
+                    <div class="product-details__flavor">
+                        <label for="flavor-select">Saveur</label>
+                        <select class="form-select flavor-selector"id="flavor-select" name="flavor">
+                            {% for flavor in flavors %}
+                                <option value="{{ flavor }}" {% if flavor == product_variant.flavor %}selected{% endif %}>{{ flavor }}</option>
+                            {% endfor %}
+                        </select> 
+                    </div>
+                    {% endif %}
+                    {% if product_variant.option %}
+                    <div class="product-details__option-name">
+                        <label for="option-select">{{option_name }}</label>
+                    </div>
+                    <div class="product-details__option-buttons">
+                        {% for option in options %}
+                            <button type="button" data-value="{{ option }}" class="btn {% if option == product_variant.option %}active{% endif %}">{{option }}</button>
+                        {% endfor %}
+                        <input type="hidden" id="selected-option" name="option" value="{{ product_variant.option }}">
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <form method="POST" action="{% url 'shop:add_to_cart' slug=product.slug %}" class="product-details__form">
+                {% csrf_token %}
+                <div class="product-details__quantity">
+                    <label for="quantity">Quantité:</label>
+                    <input type="number" name="quantity" value="1" min="1">
+                    <input type="hidden" name="variant_slug" value="{{product_variant.variant_slug}}" id="variant-slug-input">
+                </div>
+                <div class="product-details__add-to-cart">
+                    <button type="submit" class="btn btn-primary">Ajouter au panier</button>
+                </div>
+            </form>
+            <div class="product-details__review">
+                <a href="{% url 'shop:add_review' slug=product.slug %}">Ajouter un commentaire</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}
-
 
 {% block scripts %}
     <script>
@@ -63,6 +71,4 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/product_detail.js' %}"></script>
-    
-
 {% endblock %}

@@ -10,51 +10,48 @@
 {% endblock %}
 
 {% block content %}
-    <h1>CART</h1>
-    <section>
-    {% for cart_product in cart_products %}
-        <div class="card">
-            <div class="card-check">
-                <input type="checkbox" name="product-{{ cart_product.id }}-selected" {% if cart_product.selected %}checked{% else %}unchecked{% endif %} value="{{ cart_product.selected }}" data-url="{% url 'shop:update_selected_status' %}">
+    <section class="cart">
+        <h1 class="cart__title">Cart</h1>
+        <div class="cart__container">
+            {% for cart_product in cart_products %}
+            <div class="cart__product">
+                <div class="cart__checkbox-container">
+                    <input type="checkbox" name="selected-{{cart_product.id}}" {% if cart_product.selected %} checked {% endif %} data-url="{% url 'shop:update_selected_status' %}" class="checkbox">
+                </div>
+                <div class="cart__image-container">
+                    <img src="{{cart_product.product_variant.image.url}}" alt="{{cart_product.product.name}}" class="cart__image">
+                </div>
+                <div class="cart__product-details">
+                    <h2 class="cart__product-title">{{cart_product.cart_product_title}}</h2>
+                    <p class="cart__product-description">Caracteristique du produit</p>
+                    <form method="post" data-url="{% url 'shop:cart' %}" class="update_cart_product_quantity">
+                        {% csrf_token %} 
+                        <div class="cart__quantity">
+                            <label for="quantity" class="cart__quantity-label">Quantity:</label>
+                            <label for="product_id"></label>
+                            <input type="hidden" name="product_id" value="{{cart_product.id}}">
+                            <input type="number" name="quantity_{{ cart_product.id }}" value="{{cart_product.quantity}}" min="0" class="cart__quantity-input">
+                        </div>
+                        <p class="cart__total-price">{{cart_product.total_cart_product}} €</p>
+                        <div class="cart__product-buttons">
+                            <a href="{% url 'shop:remove_from_cart' slug=cart_product.product.slug variant_slug=cart_product.product_variant.variant_slug %}" class="cart__button-remove">Remove</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="card-image">
-                <img src="{{cart_product.product.image.url}}" alt="{{cart_product.product.name}}">
-            </div>
-            <div>
-                <h3>{{cart_product.cart_product_title}}</h3>
-                <div class="price">{{cart_product.product.variante.price}}</div>
-                <p>Caracteristique du produit</p>
-            </div>
-            <div>
-                <form method="post" data-url="{% url 'shop:cart' %}" class="update_cart_product_quantity">
-                    {% csrf_token %} 
-                    <label for="quantity">Quantité :</label>
-                    <label for="product_id"></label>
-                    <input type="hidden" name="product_id" value="{{cart_product.id}}">
-                    <input type="number" name="quantity_{{ cart_product.id }}" value="{{cart_product.quantity}}" min="0">
-                </form>
-                <p></p>
-                <div class="total-price">{{cart_product.total_cart_product}} €</div>
-                <a href="{% url 'shop:remove_from_cart' slug=cart_product.product.slug %}" class="remove-from-cart">Retirer du panier</a>
-            </div>
-            
+            {% endfor %}
         </div>
-    {% endfor %}
-    </section>
-    <section>
-        <div class="card-cart-resume">
-            <div class="cart-quantity-container">
-                <div class="quantity-label" >Nombre de produits</div>
-                <div class="quantity-number" >{{cart.calculate_quantity}}</div>
+        <div class="cart__summary">
+            <div class="cart__quantity-container">
+                <div class="cart__quantity-label">Nombre de produits:</div>
+                <div class="cart__quantity-number">{{cart.calculate_quantity}}</div>
             </div>
-            <div class="cart-total-container">
-                <div class="total-label" >Total TTC</div>
-                <div class="total-number" >{{cart.calculate_total}}</div>
-
+            <div class="cart__total-container">
+                <div class="cart__total-label">Total TTC:</div>
+                <div class="cart__total-number">{{cart.calculate_total}}</div>
             </div>
         </div>
     </section>
-    
 {% endblock %}
 
 
