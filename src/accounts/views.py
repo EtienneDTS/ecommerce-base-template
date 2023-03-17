@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
@@ -63,9 +64,11 @@ class Logout(LogoutView):
     next_page = 'shop:home_shop'
     
 def profile(request):
-    
+    user = request.user
+    cart = get_object_or_404(Cart, user=user)
     return render(request, "profile.html", context={
-        
+        "user": user,
+        "cart": cart,
     })
     
     

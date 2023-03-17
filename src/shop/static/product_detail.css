@@ -54,7 +54,7 @@
 
 .product-details__option-buttons button {
   height: 40px;
-  width: 70px;
+  width: auto;
   font-size: 0.8rem;
   padding: 0.7rem 1.5rem;
   border-radius: 5rem;
