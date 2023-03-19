@@ -56,5 +56,19 @@ flavor_selector.addEventListener("change", ()=>{
     });
   });
 
+var inputNumber = document.querySelector('input[name="quantity"]');
+var incrementButton = document.querySelector('#increment');
+var decrementButton = document.querySelector('#decrement');
+
+incrementButton.addEventListener('click', function() {
+  inputNumber.value = parseInt(inputNumber.value) + 1;
+});
+
+decrementButton.addEventListener('click', function() {
+  if (inputNumber.value > 1) {
+    inputNumber.value = parseInt(inputNumber.value) - 1;
+  }
+});
+
 
 

@@ -121,3 +121,40 @@
     padding: 0.5rem 1rem;
   }
 }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quantity-input-container {
+  display: flex;
+  height: 40px;
+  width: 150px;
+  margin-bottom: 10px;
+  border-radius: 30px;
+  border: solid 0.2px;
+}
+
+.input-number {
+  height: 100%;
+  width: 40%;
+  text-align: center;
+  font-size: 25px;
+}
+
+#decrement {
+  width: 33%;
+  font-size: 25px;
+  border-right: solid 0.2px #333;
+  color: #00b894;
+}
+
+#increment {
+  width: 33%;
+  font-size: 25px;
+  border-left: solid 0.1px #333;
+  color: #00b894;
+  
+}

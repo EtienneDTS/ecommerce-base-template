@@ -47,8 +47,12 @@
             <form method="POST" action="{% url 'shop:add_to_cart' slug=product.slug %}" class="product-details__form">
                 {% csrf_token %}
                 <div class="product-details__quantity">
-                    <label for="quantity">Quantité:</label>
-                    <input type="number" name="quantity" value="1" min="1">
+                    <label for="quantity" style="visibility: hidden">Quantité:</label>
+                    <div class="quantity-input-container">
+                        <button id="decrement" type="button"> - </button>
+                        <input type="number" name="quantity" value="1" min="1" class="input-number">
+                        <button id="increment" type="button"> + </button>
+                    </div>
                     <input type="hidden" name="variant_slug" value="{{product_variant.variant_slug}}" id="variant-slug-input">
                 </div>
                 <div class="product-details__add-to-cart">
