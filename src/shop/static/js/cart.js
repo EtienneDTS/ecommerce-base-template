@@ -18,6 +18,28 @@ $(document).ready(function() {
     });
 });
 
+const inputNumber = document.querySelectorAll(".cart__quantity-input");
+const incrementButton = document.querySelectorAll('.increment');
+const decrementButton = document.querySelectorAll('.decrement');
+
+inputNumber.forEach((number, index) => {
+  if (incrementButton[index]) {
+    incrementButton[index].addEventListener('click', function() {
+      number.value = parseInt(number.value) + 1;
+      number.dispatchEvent(new Event('change'));
+    });
+  }
+
+  if (decrementButton[index]) {
+    decrementButton[index].addEventListener('click', function() {
+      if (number.value > 0) {
+        number.value = parseInt(number.value) - 1;
+        number.dispatchEvent(new Event('change'));
+      }
+    });
+  }
+});
+
 $(document).ready(function() {
     $('.update_cart_product_quantity input[type="number"]').on('change', function() {
       var form = $(this).closest('form');

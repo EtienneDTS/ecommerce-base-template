@@ -30,7 +30,12 @@
                             <label for="quantity" class="cart__quantity-label">Quantity:</label>
                             <label for="product_id"></label>
                             <input type="hidden" name="product_id" value="{{cart_product.id}}">
-                            <input type="number" name="quantity_{{ cart_product.id }}" value="{{cart_product.quantity}}" min="0" class="cart__quantity-input">
+                            <div class="quantity-input-container">
+                                <button id="decrement" type="button" class="decrement"> - </button>
+                                <input type="number" name="quantity_{{ cart_product.id }}" value="{{cart_product.quantity}}" min="0" class="cart__quantity-input" id="quantity-input">
+                                <button id="increment" type="button" class="increment"> + </button>
+                            </div>
+                            
                         </div>
                         <p class="cart__total-price">{{cart_product.total_cart_product}} €</p>
                         <div class="cart__product-buttons">
