@@ -11,19 +11,23 @@
 
 {% block content %}
     <section class="cart">
-        <h1 class="cart__title">Cart</h1>
+        <h1 class="cart__title">Panier</h1>
         <div class="cart__container">
             {% for cart_product in cart_products %}
             <div class="cart__product">
                 <div class="cart__checkbox-container">
                     <input type="checkbox" name="selected-{{cart_product.id}}" {% if cart_product.selected %} checked {% endif %} data-url="{% url 'shop:update_selected_status' %}" class="checkbox">
                 </div>
+                <a href="{% url 'shop:product_detail' slug=cart_product.product.slug variant_slug=cart_product.product_variant.variant_slug %}">
                 <div class="cart__image-container">
                     <img src="{{cart_product.product_variant.image.url}}" alt="{{cart_product.product.name}}" class="cart__image">
                 </div>
+                </a>
                 <div class="cart__product-details">
+                    <a href="{% url 'shop:product_detail' slug=cart_product.product.slug variant_slug=cart_product.product_variant.variant_slug %}">
                     <h2 class="cart__product-title">{{cart_product.cart_product_title}}</h2>
-                    <p class="cart__product-description">Caracteristique du produit</p>
+                    </a>
+                    <p class="cart__product-description">{{cart_product.product.description|truncatechars:200}}</p>
                     <form method="post" data-url="{% url 'shop:cart' %}" class="update_cart_product_quantity">
                         {% csrf_token %} 
                         <div class="cart__quantity">
