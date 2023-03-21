@@ -31,9 +31,19 @@
                 </li>
                 <li>
                     {% if cart %}
-                        <a href="{% url 'shop:cart' %}">Cart ({{cart.calculate_quantity}})</a>
+                        <a href="{% url 'shop:cart' %}">
+                            <div class="nav__cart-icon">
+                                <img src="{% static 'ressources/cart_logo.png' %}" alt="Logo" alt="icon du panier">
+                            </div>
+                            <span class="badge">{{cart.calculate_quantity}}</span>
+                        </a>
                     {% else %}
-                        <a href="{% url 'shop:cart' %}">Cart (0)</a>
+                        <a href="{% url 'shop:cart' %}" class="logo-link">
+                            <div class="nav__cart-icon">
+                                <img src="{% static 'ressources/cart_logo.png' %}" alt="Logo" alt="icon du panier">
+                            </div>
+                            <span class="badge" >0</span>
+                        </a>
                     {% endif %}
                 </li>
             </ul>  
