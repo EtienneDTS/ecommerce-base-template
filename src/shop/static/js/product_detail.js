@@ -32,11 +32,11 @@ for (var i = 0; i < option_buttons.length; i++) {
         },
         success: function(data) {
           // Met à jour l'image du produit
-          document.querySelector('img').src = data.image_url;
+          document.getElementById('product-details__main-image').src = data.image_url;
     
           // Met à jour le prix du produit
-          document.querySelector('span').textContent = data.price + " €";
-          document.querySelector("#variant-slug-input").value = data.slug
+          document.getElementById('product-details__price-info').textContent = data.price + " €";
+          document.getElementById("variant-slug-input").value = data.slug
         }
       })
     });

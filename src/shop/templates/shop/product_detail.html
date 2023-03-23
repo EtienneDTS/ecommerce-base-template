@@ -12,12 +12,12 @@
 {% block content %}
     <div class="product-details">
         <div class="product-details__image">
-            <img src="{{product_variant.image.url}}" alt="{{product.name}}">
+            <img src="{{product_variant.image.url}}" alt="{{product.name}}" id="product-details__main-image">
         </div>
         <div class="product-details__info">
             <h3 class="product-details__name">{{product.name}}</h3>
             <div class="product-details__price">
-                <span>{{product_variant.price}} €</span>
+                <span id="product-details__price-info">{{product_variant.price}} €</span>
             </div>
             <div class="product-details__options">
                 <div class="product-details__option">
