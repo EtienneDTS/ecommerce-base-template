@@ -1,10 +1,23 @@
-nav {
+body {
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
   background-color: #333;
+  background-color: #f1f1f1;
+}
+
+
+
+
+nav {
+  position: fixed;
+  background-color: #1A1A1D;
   display: flex;
   align-items: center;
-  height: 80px;
+  height: 120px;
   padding: 0 50px;
   width: 100%;
+  z-index: 9999;
 }
 
 nav ul {
@@ -31,7 +44,7 @@ nav ul li a {
 .nav__cart-icon {
   height: 50px;
   width: 50px;
-  background-color: #009e7e;
+  background-color: #fcb558;
   border-radius: 10000px;
 }
 
@@ -47,7 +60,7 @@ nav ul li a {
 .nav__cart-icon {
   height: 50px;
   width: 50px;
-  background-color: #2ecc71;
+  background-color: #fcb558;
   border-radius: 10000px;
   position: relative;
   display: flex;
@@ -75,10 +88,61 @@ nav ul li a {
   text-align: center;
 }
 
-nav ul li:not(:last-child) a:hover {
-  background-color: #2ecc71;
+
+
+.nav__account-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.nav__account-icon {
+  height: 50px;
+  width: 50px;
+  background-color: #fcb558 ;
+  border-radius: 10000px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav__account-icon img {
+  height: 80%;
+  width: 80%;
+}
+
+.nav__account-name {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.nav__account-name div {
   color: #fff;
-  border-radius: 50px;
-  transition: all 0.3s ease;
-  transform: scale(1.1);
+}
+
+.nav__company-logo {
+  margin-top: 80px;
+  height: 180px;
+  width: 180px;
+  position: relative;
+  border-radius: 10000px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(20%);
+}
+
+.nav__company-logo img {
+  height: 100%;
+  width: 100%;
+}
+
+main {
+  padding-top: 150px;
 }

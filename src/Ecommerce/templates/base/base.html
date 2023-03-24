@@ -12,6 +12,7 @@
     {% endblock %}
     <link rel="stylesheet" href="{% static 'base.css' %}">
     <link rel="stylesheet" href="{% static 'reset.css' %}">
+    
     {% block addstylesheet %}
     {% endblock %}
 </head>
@@ -19,15 +20,31 @@
     {% block navbar %}
         <nav>
             <ul>
-                <li><a href="{% url 'shop:home_shop' %}">shop name</a></li>
+                
                 <li>qzdqd</li>
                 <li>qdqzd</li>
                 <li>
-                    {% if user.is_authenticated %} 
-                        <a href="{% url 'accounts:profile' %}">{{user.username}}</a>
-                    {% else %}
-                        <a href="{% url 'accounts:login' %}">Connexion</a>  
-                    {% endif %}
+                    <a href="{% url 'shop:home_shop' %}">
+                    <div class="nav__company-logo" >
+                        <img src="{% static 'ressources/company_logo.png' %}" alt="">
+                    </div>    
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'accounts:profile' %}">
+                    <div class="nav__account-container">
+                        <div class="nav__account-icon">
+                            <img src="{% static 'ressources/account_icon.png' %}" alt="icon compte">
+                        </div>
+                        <div class="nav__account-name">
+                            {% if user.is_authenticated %} 
+                                <div href="{% url 'accounts:profile' %}">{{user.username}}</div>
+                            {% else %}
+                                <div href="{% url 'accounts:login' %}">Connexion</div>  
+                            {% endif %}
+                        </div>
+                    </div>
+                    </a>
                 </li>
                 <li>
                     {% if cart %}
@@ -50,9 +67,10 @@
         </nav>
     {% endblock %}
 
-
-    {% block content %}
-    {% endblock %}
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
 
     {% block footer %}
     {% endblock %}
