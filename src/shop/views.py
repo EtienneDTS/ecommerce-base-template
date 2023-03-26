@@ -76,7 +76,6 @@ def update_variant_detail(request, slug):
     flavor = None
     color = None
     if request.method == "POST":
-        print("salut")
         if request.POST.get("flavor") != None:    
             flavor = request.POST.get("flavor")
         if request.POST.get("flavor") != None:    

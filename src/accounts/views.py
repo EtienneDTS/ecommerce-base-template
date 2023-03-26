@@ -64,6 +64,8 @@ class Logout(LogoutView):
     next_page = 'shop:home_shop'
     
 def profile(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
     user = request.user
     cart = get_object_or_404(Cart, user=user)
     return render(request, "profile.html", context={

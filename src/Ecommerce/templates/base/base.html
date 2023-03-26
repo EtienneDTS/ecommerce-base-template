@@ -21,8 +21,18 @@
         <nav>
             <ul>
                 
-                <li>qzdqd</li>
-                <li>qdqzd</li>
+                <li>
+                    <div class="nav__search-bar">
+                        <form action="#" method="get" class="search-bar-form">
+                            <input type="text" placeholder="Rechercher...">
+                            <a href="#">
+                                <div class="search-bar-icon">
+                                    <img src="{% static 'ressources/glass_icon.png' %}" alt="">
+                                </div>
+                            </a>
+                        </form>
+                    </div>
+                </li>
                 <li>
                     <a href="{% url 'shop:home_shop' %}">
                     <div class="nav__company-logo" >
