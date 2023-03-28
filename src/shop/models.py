@@ -150,8 +150,8 @@ class Cart(models.Model):
         self.total_product = quantity
         return quantity
     
-    def remove_cart_product(self, product, product_variant):
-        cart_product = get_object_or_404(CartProduct, product=product, product_variant=product_variant)
+    def remove_cart_product(self, cart, product, product_variant):
+        cart_product = get_object_or_404(CartProduct, cart=cart, product=product, product_variant=product_variant)
         cart_product.delete()
         
     def add_product(self, cart, product, product_varitant, quantity):

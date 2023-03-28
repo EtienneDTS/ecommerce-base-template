@@ -1,3 +1,11 @@
+body {
+  background-color: #f1f1f1;
+}
+
+main {
+  padding-top: 180px;
+}
+
 .cart {
   max-width: 1200px;
   margin: 0 auto;
@@ -62,24 +70,16 @@
 .cart__quantity {
   margin: 10px 0;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
 .cart__quantity-label {
   font-size: 1rem;
   font-weight: 500;
+  margin-right: 20px;
 }
 
-.cart__quantity-input {
-  width: 50px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 500;
-  text-align: center;
-}
+
 
 .cart__total-price {
   font-size: 1.2rem;
@@ -89,35 +89,38 @@
 
 .cart__product-buttons {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: auto;
-}
-
-.cart__button-update,
-.cart__button-remove {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.cart__button-update {
-  background-color: #00b894;
-  color: #fff;
 }
 
 .cart__button-remove {
-  background-color: #e74c3c;
-  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  margin-left: 10px;
+  transition: all 0.2s ease-in-out;
 }
 
-.cart__button-update:hover,
 .cart__button-remove:hover {
-  background-color: #009e7e;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);
+  transform: translateY(2px);
+}
+
+.cart_product-buttons-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+}
+
+.cart_product-buttons-icon img {
+  width: 60%;
+  height: 60%;
 }
 
 .cart__summary {
@@ -167,7 +170,7 @@
 }
 
 .checkbox:checked {
-  background-color: #00b894;
+  background-color: #333;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -178,11 +181,10 @@ input[type=number]::-webkit-outer-spin-button {
 
 .quantity-input-container {
   display: flex;
-  height: 40px;
-  width: 150px;
+  height: 30px;
+  width: 100px;
   margin-bottom: 10px;
-  border-radius: 30px;
-  border: solid 0.2px;
+  border-radius: 10px;
 }
 
 .cart__quantity-input {
@@ -190,20 +192,23 @@ input[type=number]::-webkit-outer-spin-button {
   width: 40%;
   text-align: center;
   font-size: 25px;
+  background-color: #f1f1f1;
 }
 
 #decrement {
   width: 33%;
   font-size: 25px;
-  border-right: solid 0.2px #333;
-  color: #00b894;
+  background-color: #fcb558;
+  color: #333;
+  border-radius: 10px 0 0 10px;
 }
 
 #increment {
   width: 33%;
   font-size: 25px;
-  border-left: solid 0.1px #333;
-  color: #00b894;
+  background-color: #fcb558;
+  color: #333;
+  border-radius: 0 10px 10px 0;
   
 }
 

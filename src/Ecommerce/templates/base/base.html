@@ -20,7 +20,13 @@
     {% block navbar %}
         <nav>
             <ul>
-                
+                <li>
+                    <div class="nav__hamburger-menu">
+                        <div class="bar bar-1"></div>
+                        <div class="bar bar-2"></div>
+                        <div class="bar bar-3"></div>
+                    </div>
+                </li>
                 <li>
                     <div class="nav__search-bar">
                         <form action="#" method="get" class="search-bar-form">
@@ -77,6 +83,7 @@
                 </li>
             </ul>  
         </nav>
+        <div class="toggle-menu"></div>
     {% endblock %}
 
     <main>
@@ -89,5 +96,6 @@
 
     {% block scripts %}
     {% endblock %}
+    <script src="{% static 'js/base.js' %}"></script>
 </body>
 </html>

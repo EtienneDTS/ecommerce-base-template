@@ -131,7 +131,8 @@ def cart(request):
                     cart_product.quantity = new_quantity
                     cart_product.save()
                 else:
-                    cart.remove_cart_product(product=cart_product.product, product_variant=cart_product.product_variant)
+                    cart.remove_cart_product(
+                        cart=cart, product=cart_product.product, product_variant=cart_product.product_variant)
     request.session['cart_quantity'] = cart.calculate_quantity
     return render(request, "shop/cart.html", context={
         "cart_products": cart_products,
@@ -151,7 +152,7 @@ def remove_from_cart(request, slug, variant_slug):
         
     product = get_object_or_404(Product, slug=slug)
     product_variant = get_object_or_404(ProductVariant, product=product, variant_slug=variant_slug)
-    cart.remove_cart_product(product=product, product_variant=product_variant)
+    cart.remove_cart_product(cart=cart, product=product, product_variant=product_variant)
     return redirect("shop:cart")
 
 

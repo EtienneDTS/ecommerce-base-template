@@ -42,10 +42,14 @@
                             
                         </div>
                         <p class="cart__total-price">{{cart_product.total_cart_product}} €</p>
-                        <div class="cart__product-buttons">
-                            <a href="{% url 'shop:remove_from_cart' slug=cart_product.product.slug variant_slug=cart_product.product_variant.variant_slug %}" class="cart__button-remove">Remove</a>
-                        </div>
                     </form>
+                </div>
+                <div class="cart__product-buttons">
+                    <a href="{% url 'shop:remove_from_cart' slug=cart_product.product.slug variant_slug=cart_product.product_variant.variant_slug %}" class="cart__button-remove">
+                        <div class="cart_product-buttons-icon">
+                            <img src="{% static 'ressources/trash-icon.png' %}" alt="">
+                        </div>
+                    </a>
                 </div>
             </div>
             {% endfor %}

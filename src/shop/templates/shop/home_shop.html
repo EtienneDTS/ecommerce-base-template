@@ -16,16 +16,16 @@
     <h1>Nos produits</h1>
     <div class="products">
       {% for variant in first_price_variant_per_products %}
-        <div class="product">
-          <a href="{% url 'shop:product_detail' slug=variant.product.slug variant_slug=variant.variant_slug %}">
+      <a href="{% url 'shop:product_detail' slug=variant.product.slug variant_slug=variant.variant_slug %}">
+      <div class="product">
             <div class="product-image">
               <img src="{{ variant.image.url }}" alt="{{ variant.variant_name }}">
             </div>
-          </a>
           <div class="product-info">
             <h2>{{ variant.product.product_title }}</h2>
             <p class="product-price">A partir de {{ variant.price }} €</p>
           </div>
+      </a>
         </div>
       {% empty %}
         <p>Aucun produit n'est disponible pour le moment.</p>
