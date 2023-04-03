@@ -1,9 +1,15 @@
-body {
-  background-color: #f1f1f1;
-}
-
 main {
   padding-top: 180px;
+}
+
+.separator {
+  width: 100%;
+  height: 1px;
+  background-color: #000000;
+  margin-bottom: 10px;
+  margin: 3px;
+  border-radius: 50px;
+  z-index: 333;
 }
 
 .product-details {
@@ -37,17 +43,11 @@ main {
 .product-details__image img {
   width: 70%;
   height: 70%;
-  border: solid 0.2px #b8b3b3;
-  
-
-  
-  
-  
-  
+  border: solid 0.2px white;
 }
 
 .product-details__info {
-  max-width: 60%;
+  max-width: 80%;
   width: 40%;
   display: flex;
   flex-direction: column;
@@ -58,7 +58,7 @@ main {
 }
 
 .product-details__name {
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin: 0;
   font-weight: bold;
   color: #333;
@@ -68,14 +68,18 @@ main {
 .product-details__price {
   font-size: 2rem;
   margin-bottom: 1rem;
+  color: #fcb558;
+  font-weight: bold;
 }
 
 .product-details__form {
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 .product-details__options {
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 .product-details__flavor,
@@ -88,27 +92,33 @@ main {
   margin-right: 0.5rem;
 }
 
+.product-details__option-name label {
+  font-weight: bold;
+  color: #333;
+}
+
 .product-details__option-buttons button {
   height: 40px;
   width: auto;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: bold;
   padding: 0.7rem 1.5rem;
   border-radius: 5rem;
-  border: none;
-  color: white;
-  background-color: #333;
+  border: solid #fcb558 1px;
+  color: #333;
   transition: all 0.3s ease;
 }
 .product-details__add-to-cart button {
   background-color: #fcb558;
   border: none;
   border-radius: 5px;
-  color: #333;
+  color: white;
   font-size: large;
   font-size: 1.2rem;
+  font-weight: bold;
   padding: 0.5rem 1rem;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 .product-details__add-to-cart button:hover {
@@ -118,15 +128,16 @@ main {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.product-details__option-buttons button:hover,
-.product-details__option-buttons button:focus {
+.product-details__option-buttons button:hover {
   cursor: pointer;
-  background-color: #555;
+  box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.2);
 }
 
 .product-details__option-buttons button.active {
   background-color: #fcb558;
-  color: #333;
+  color: white;
+  font-weight: bold;
+  border: solid 1px #333;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -141,7 +152,7 @@ input[type=number]::-webkit-outer-spin-button {
   width: 100px;
   margin-bottom: 10px;
   border-radius: 10px;
-  background-color: antiquewhite;
+  border: solid 0.2px #fcb558;
 }
 
 .input-number {
@@ -149,21 +160,25 @@ input[type=number]::-webkit-outer-spin-button {
   width: 40%;
   text-align: center;
   font-size: 25px;
+  font-weight: bold;
+  color: #333;
 }
 
 #decrement {
   width: 33%;
   font-size: 25px;
-  background-color: #fcb558;
-  color: #333;
+  font-weight: bold;
+  color: #fcb558;
   border-radius: 10px 0 0 10px;
+  display: flex;
+  line-height: 23px;
 }
 
 #increment {
   width: 33%;
   font-size: 25px;
-  background-color: #fcb558;
-  color: #333;
+  font-weight: bold;
+  color: #fcb558;
   border-radius: 0 10px 10px 0;
   
 }
@@ -184,11 +199,12 @@ input[type=number]::-webkit-outer-spin-button {
 .product-details__flavor select {
   padding: 8px;
   border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  color: #333;
-  background-color: antiquewhite;
+  border: 1px solid #fcb558;
+  font-size: 20px;
+  font-weight: bold;
+  color: #919090;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 .product-details__flavor select:focus {
@@ -198,7 +214,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 .product-details__flavor select option {
   font-size: 16px;
-  color: #333;
+  color: #555;
+  font-weight: bold;
 }
 
 .product-details__flavor select option[selected] {

@@ -1,6 +1,4 @@
-body {
-  background-color: #f1f1f1;
-}
+
 
 main {
   padding-top: 70px;
@@ -15,7 +13,7 @@ main {
   }
   
   .product {
-    background-color: #fff;
+    background-color: #f1f1f1;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
     margin: 20px;
