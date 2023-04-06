@@ -1,10 +1,9 @@
 
 var flavor_selector = document.getElementById("flavor-select");
 var option_buttons = document.querySelectorAll('.product-details__option-buttons button');
-console.log(option_buttons)
 var hiddenInput = document.querySelector("#selected-option");
 hiddenInput.value = default_selected_option
-console.log(hiddenInput.value)
+
 
 
 
@@ -70,5 +69,38 @@ decrementButton.addEventListener('click', function() {
   }
 });
 
-
+$(document).ready(function() {
+  $('.product-details__add-to-cart button').click(function(e) {
+      e.preventDefault();
+      
+      var form = $(this).closest('form');
+      var url = form.attr('action');
+      var data = form.serialize();
+      
+      $.ajax({
+          url: url,
+          method: 'POST',
+          data: data,
+          beforeSend: function(xhr, settings) {
+              xhr.setRequestHeader('X-CSRFToken', csrfToken);
+          },
+          success: function(data) {
+              // Afficher un message de confirmation ou rediriger vers la page de panier
+              var badge = document.querySelector(".badge")
+              
+              var notification = document.querySelector(".notification");
+              var btn = document.querySelector(".btn-primary");
+              btn.classList.add("btn-loading")
+              setTimeout(function(){
+                notification.classList.add('show');
+                btn.classList.remove("btn-loading");
+                badge.innerHTML = data.new_cart_quantity;
+              }, 500);
+              setTimeout(function() {
+                notification.classList.remove('show');
+              }, 3000);
+          },
+      });
+  });
+});
 

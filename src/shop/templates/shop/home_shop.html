@@ -15,15 +15,16 @@
 <div class="container">
     <h1>Nos produits</h1>
     <div class="products">
-      {% for variant in first_price_variant_per_products %}
+      {% for variant in products_variant %}
       <a href="{% url 'shop:product_detail' slug=variant.product.slug variant_slug=variant.variant_slug %}">
       <div class="product">
             <div class="product-image">
               <img src="{{ variant.image.url }}" alt="{{ variant.variant_name }}">
+              <button class="add-to-cart">AJOUTER AU PANIER</button>
             </div>
           <div class="product-info">
             <h2>{{ variant.product.product_title }}</h2>
-            <p class="product-price">A partir de {{ variant.price }} €</p>
+            <p class="product-price">{{ variant.price }} €</p>
           </div>
       </a>
         </div>
@@ -34,4 +35,8 @@
   </div>
 
 
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/home_shop.js' %}"></script>
 {% endblock %}

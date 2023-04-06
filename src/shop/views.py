@@ -22,6 +22,12 @@ def home_view(request):
         cart = Cart.objects.filter(user=request.user).first()
     else:
         cart = Cart.objects.filter(session_key=request.session.session_key).first()
+    
+    context = {
+        "first_price_variant_per_products": first_price_variant_per_products,
+        "cart": cart,
+        "products_variant": products_variant,
+    }
     return render(request, "shop/home_shop.html", context={
         "first_price_variant_per_products": first_price_variant_per_products,
         "cart": cart,
@@ -107,7 +113,10 @@ def add_to_cart(request, slug):
         product = get_object_or_404(Product, slug=slug)
         product_variant = get_object_or_404(ProductVariant, product=product, variant_slug=variant_slug)    
         cart.add_product(cart, product, product_variant, quantity)
-    return redirect('shop:cart')
+        new_cart_quantity = cart.calculate_quantity
+        data = {'success': True, 'new_cart_quantity': new_cart_quantity}
+    return JsonResponse(data)
+
 
 def cart(request):
     if request.user.is_authenticated:

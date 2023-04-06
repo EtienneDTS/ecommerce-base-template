@@ -1,5 +1,4 @@
 
-
 main {
   padding-top: 70px;
 }
@@ -177,35 +176,39 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+.cart__quantity-input {
+  height: 100%;
+  width: 40%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
 .quantity-input-container {
   display: flex;
   height: 30px;
   width: 100px;
   margin-bottom: 10px;
   border-radius: 10px;
-}
-
-.cart__quantity-input {
-  height: 100%;
-  width: 40%;
-  text-align: center;
-  font-size: 25px;
-  background-color: #f1f1f1;
+  border: solid 0.2px #fcb558;
 }
 
 #decrement {
   width: 33%;
   font-size: 25px;
-  background-color: #fcb558;
-  color: #333;
+  font-weight: bold;
+  color: #fcb558;
   border-radius: 10px 0 0 10px;
+  display: flex;
+  line-height: 23px;
 }
 
 #increment {
   width: 33%;
   font-size: 25px;
-  background-color: #fcb558;
-  color: #333;
+  font-weight: bold;
+  color: #fcb558;
   border-radius: 0 10px 10px 0;
   
 }

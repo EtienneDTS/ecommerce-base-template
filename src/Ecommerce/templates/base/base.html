@@ -42,7 +42,7 @@
                 <li>
                     <a href="{% url 'shop:home_shop' %}">
                     <div class="nav__company-logo" >
-                        <img src="{% static 'ressources/company_logo.png' %}" alt="">
+                        <img src="{% static 'ressources/kws_logo.png' %}" alt="logo de l'entreprise">
                     </div>    
                     </a>
                 </li>
@@ -85,6 +85,13 @@
         </nav>
         <div class="toggle-menu">bonjour</div>
     {% endblock %}
+
+    <div class="notification">
+        <div class="notification-icon">
+            <img src="{% static 'ressources/notification-icon.png' %}" alt="notification icon">
+        </div>
+        <span>ARTICLE AJOUTÉ AU PANIER ! <a href="{% url 'shop:cart' %}">Voir le panier</a></span>
+    </div>
 
     <main>
         {% block content %}
