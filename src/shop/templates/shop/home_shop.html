@@ -20,7 +20,12 @@
       <div class="product">
             <div class="product-image">
               <img src="{{ variant.image.url }}" alt="{{ variant.variant_name }}">
-              <button class="add-to-cart">AJOUTER AU PANIER</button>
+              <form action="{% url 'shop:add_to_cart' slug=variant.product.slug %}" method="POST" class="add-to-cart-form">
+                {% csrf_token %}
+                <input type="text" value="{{variant.variant_slug}}" name="variant_slug" hidden>
+                <input type="number" name="quantity" value="1" hidden>
+                <button class="add-to-cart">AJOUTER AU PANIER</button>
+              </form>
             </div>
           <div class="product-info">
             <h2>{{ variant.product.product_title }}</h2>
@@ -38,5 +43,7 @@
 {% endblock %}
 
 {% block scripts %}
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="{% static 'js/home_shop.js' %}"></script>
 {% endblock %}

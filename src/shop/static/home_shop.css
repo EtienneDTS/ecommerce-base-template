@@ -14,7 +14,6 @@ main {
   background-color: white;
   border-radius: 5px;
   margin: 20px;
-  overflow: hidden;
   position: relative;
   width: 360px;
   height: 400px;
@@ -38,10 +37,14 @@ main {
   height: 100%;
 }
 
+.add-to-cart-form {
+  position: relative;
+  top: -20%;
+}
+
 .add-to-cart {
   position: relative;
   cursor: pointer;
-  top: -20%;
   left: 10%;
   width: 80%;
   height: 40px;
@@ -70,6 +73,36 @@ main {
   background-color: #ffc77e;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+.btn-loading {
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.btn-loading::after {
+  content: "";
+  position: absolute;
+  border-radius: 5px;
+  display: block;
+  opacity: 1;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #ef9217;
+  animation: slide 0.5s linear ;
+}
+
+@keyframes slide {
+  from {
+    width: 100%;
+    left: 0;
+  }
+  to {
+    width: 0%;
+    left: 100%;
+  }
+}
   
 .product-info {
   padding: 20px;
@@ -93,15 +126,5 @@ main {
   text-align: center;
 }
   
-.buy-button {
-  background-color: #eb4d4b;
-  border: none;
-  border-radius: 5px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 10px;
-  transition: background-color 0.3s ease;
-  margin: auto;
-}
+
   

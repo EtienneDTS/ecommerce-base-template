@@ -1,3 +1,4 @@
+var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
 var flavor_selector = document.getElementById("flavor-select");
 var option_buttons = document.querySelectorAll('.product-details__option-buttons button');

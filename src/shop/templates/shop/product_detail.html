@@ -69,7 +69,7 @@
 
 {% block scripts %}
     <script>
-        var csrfToken = "{{csrf_token}}";
+
         var default_selected_option = "{{product_variant.option}}";
         var get_variant_view_url = "{% url 'shop:get_product_variant_url' slug=product.slug %}"
         var update_variant_detail = "{% url 'shop:update_variant_detail' slug=product.slug %}"
