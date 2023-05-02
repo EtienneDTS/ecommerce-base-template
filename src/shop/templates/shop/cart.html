@@ -18,20 +18,20 @@
                 <div class="cart__checkbox-container">
                     <input type="checkbox" name="selected-{{cart_product.id}}" {% if cart_product.selected %} checked {% endif %} data-url="{% url 'shop:update_selected_status' %}" class="checkbox">
                 </div>
-                <a href="{% url 'shop:product_detail' slug=cart_product.product.slug variant_slug=cart_product.product_variant.variant_slug %}">
+                <a href="{% url 'shop:product_detail' slug=cart_product.product.slug variant_slug=cart_product.product_variant.variant_slug product_id=cart_product.product.id variant_id=cart_product.product_variant.id %}">
                 <div class="cart__image-container">
                     <img src="{{cart_product.product_variant.image.url}}" alt="{{cart_product.product.name}}" class="cart__image">
                 </div>
                 </a>
                 <div class="cart__product-details">
-                    <a href="{% url 'shop:product_detail' slug=cart_product.product.slug variant_slug=cart_product.product_variant.variant_slug %}">
+                    <a href="{% url 'shop:product_detail' slug=cart_product.product.slug variant_slug=cart_product.product_variant.variant_slug product_id=cart_product.product.id variant_id=cart_product.product_variant.id %}">
                     <h2 class="cart__product-title">{{cart_product.cart_product_title}}</h2>
                     </a>
                     <p class="cart__product-description">{{cart_product.product.description|truncatechars:200}}</p>
                     <form method="post" data-url="{% url 'shop:cart' %}" class="update_cart_product_quantity">
                         {% csrf_token %} 
                         <div class="cart__quantity">
-                            <label for="quantity" class="cart__quantity-label">Quantity:</label>
+                            <label for="quantity" class="cart__quantity-label"></label>
                             <label for="product_id"></label>
                             <input type="hidden" name="product_id" value="{{cart_product.id}}">
                             <div class="quantity-input-container">
@@ -44,9 +44,9 @@
                     </form>
                 </div>
                 <div class="cart__product-buttons">
-                    <a href="{% url 'shop:remove_from_cart' slug=cart_product.product.slug variant_slug=cart_product.product_variant.variant_slug %}" class="cart__button-remove">
+                    <a href="{% url 'shop:remove_from_cart' product_id=cart_product.product.id variant_id=cart_product.product_variant.id %}" class="cart__button-remove">
                         <div class="cart_product-buttons-icon">
-                            <img src="{% static 'ressources/trash-icon.png' %}" alt="">
+                            <img src="{% static 'ressources/trash_icon.png' %}" alt="">
                         </div>
                     </a>
                 </div>
@@ -55,13 +55,20 @@
         </div>
         <div class="cart__summary">
             <div class="cart__quantity-container">
-                <div class="cart__quantity-label">Nombre de produits:</div>
+                <div class="cart__quantity-label">Total produit</div>
                 <div class="cart__quantity-number">{{cart.calculate_quantity}}</div>
             </div>
             <div class="cart__total-container">
-                <div class="cart__total-label">Total TTC:</div>
-                <div class="cart__total-number">{{cart.calculate_total}}</div>
+                <div class="cart__total-label">Total TTC </div>
+                <div class="cart__total-number">{{cart.calculate_total}} €</div>
             </div>
+            <hr>
+            <div class="promo_code_container">
+                <label for="promo_code"></label>
+                <input name="promo_code" type="text" placeholder="CODE PROMO">
+                <button class="promo_code_btn">AJOUTER</button>
+            </div>
+            <button class="order_btn">VALIDER LA COMMANDE</button>
         </div>
     </section>
 {% endblock %}

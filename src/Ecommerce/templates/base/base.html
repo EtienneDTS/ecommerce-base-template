@@ -40,7 +40,7 @@
                     </div>
                 </li>
                 <li>
-                    <a href="{% url 'shop:home_shop' %}">
+                    <a href="{% url 'shop:home_shop' category='all' %}">
                     <div class="nav__company-logo" >
                         <img src="{% static 'ressources/kws_logo.png' %}" alt="logo de l'entreprise">
                     </div>    
@@ -54,34 +54,32 @@
                         </div>
                         <div class="nav__account-name">
                             {% if user.is_authenticated %} 
-                                <div href="{% url 'accounts:profile' %}">{{user.username}}</div>
+                                <div class="account_title" href="{% url 'accounts:profile' %}">{{user.username}}</div>
                             {% else %}
-                                <div href="{% url 'accounts:login' %}">Connexion</div>  
+                                <div href="{% url 'accounts:login' %}" class="account_title">Connexion</div>  
                             {% endif %}
                         </div>
                     </div>
                     </a>
                 </li>
                 <li>
-                    {% if cart %}
-                        <a href="{% url 'shop:cart' %}">
-                            <div class="nav__cart-icon">
-                                <img src="{% static 'ressources/cart_logo.png' %}" alt="Logo" alt="icon du panier">
-                            </div>
-                            {% if cart.calculate_quantity > 0 %}
-                            <span class="badge">{{cart.calculate_quantity}}</span>
-                            {% endif %}
-                        </a>
-                    {% else %}
-                        <a href="{% url 'shop:cart' %}" class="logo-link">
-                            <div class="nav__cart-icon">
-                                <img src="{% static 'ressources/cart_logo.png' %}" alt="Logo" alt="icon du panier">
-                            </div>
-                            
-                        </a>
-                    {% endif %}
+                    <a href="{% url 'shop:cart' %}">
+                        <div class="nav__cart-icon">
+                            <img src="{% static 'ressources/cart_logo.png' %}" alt="Logo" alt="icon du panier">
+                        </div>
+                        <span class="badge">{{cart.calculate_quantity}}</span>
+                    </a>
                 </li>
             </ul>  
+        </nav>
+        <nav class="sub_nav">
+            <ul>
+                <li><a href="#">Keycaps</a></li>
+                <li><a href="#">Clavier</a></li>
+                <li><a href="#">Switch</a></li>
+                <li><a href="#">Tapis</a></li>
+                <li><a href="#">Tous nos produits</a></li>
+            </ul>
         </nav>
         <div class="toggle-menu">bonjour</div>
     {% endblock %}
@@ -93,6 +91,25 @@
         <span>ARTICLE AJOUTÉ AU PANIER ! <a href="{% url 'shop:cart' %}">Voir le panier</a></span>
     </div>
 
+    <div class="cart_dropdown">
+        <h1 class="cart__title">
+            Aperçu</h1>
+        <div class="cart__container">
+        </div>
+        <div class="cart__summary">
+            <div class="cart__quantity-container">
+                <div class="cart__quantity-label">Total produit</div>
+                <div class="cart__quantity-number">{{cart.calculate_quantity}}</div>
+            </div>
+            <div class="cart__total-container">
+                <div class="cart__total-label">Total TTC </div>
+                <div class="cart__total-number">{{cart.calculate_total}} €</div>
+            </div>
+            <hr>
+            <a class="order_btn" href="{% url 'shop:cart' %}">ALLER AU PANIER</a>
+        </div>
+    </div>
+
     <main>
         {% block content %}
         {% endblock %}
@@ -100,10 +117,15 @@
 
     {% block footer %}
     {% endblock %}
-
+    <div id="get_trash_icon_url" url="{% static 'ressources/trash_icon.png' %}" style="display: none;"></div>
     {% block scripts %}
     {% endblock %}
-    <script src="{% static 'js/base.js' %}"></script>
+
+    <script src="{% static 'js/base.js' %}">
+        
+    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+
 </body>
 </html>

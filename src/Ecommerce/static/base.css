@@ -1,6 +1,6 @@
 .notification {
   position: fixed;
-  top: 60px;
+  top: 100px;
   height: 60px;
   width: 100%;
   background-color: #4CD37B;
@@ -37,7 +37,7 @@
   visibility: visible;
   transform: translateY(0%);
   transition: all 0.2s ease;
-  top: 60px;
+  top: 100px;
 }
 
 main {
@@ -52,9 +52,10 @@ nav {
   display: flex;
   align-items: center;
   height: 60px;
-  padding: 0 50px;
   width: 100%;
   z-index: 9999;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 nav ul {
@@ -197,6 +198,7 @@ nav ul li {
   justify-content: center;
   align-items: center;
   margin-left: 10px;
+  font-weight: bold;
 }
 
 .nav__account-name div {
@@ -207,7 +209,7 @@ nav ul li {
   position: absolute;
   left: 50%;
   top: -30px;
-  transform: translate(-50%);
+  transform: translate(-40%);
   height: 120px;
   width: 150px;
   border-radius: 10000px;
@@ -288,7 +290,55 @@ nav ul li {
   display: block;
 }
 
+.sub_nav {
+  height: 40px;
+  width: 100%;
+  position: fixed;
+  background-color: #1A1A1D;
+  color: white;
+  font-weight: bold;
+  position: fixed;
+  top: 60px;
+}
+
+.sub_nav ul {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.sub_nav ul li {
+  position: relative; /* Ajout de cette ligne pour positionner le pseudo-élément par rapport au li */
+}
+
+.sub_nav ul li a::before {
+  content: "";
+  position: absolute; /* Utilisation de position:absolute pour placer le pseudo-élément par rapport à li */
+  left: 50%;
+  bottom: -1px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: #fcb558;
+  transition: width 0.3s;
+  border-radius: 50px;
+}
+
+.sub_nav ul li a:hover::before {
+  width: 80%;
+}
+
 @media screen and (max-width: 768px) {
+
+  .notification {
+    top: 60px;
+  }
+  .notification.show {
+    top: 60px;
+  }
+
   .nav__hamburger-menu {
     display: block;
   }
@@ -301,4 +351,248 @@ nav ul li {
     display: none;
   }
 
+  .sub_nav {
+    display: none;
+  }
 }
+
+/* Section cart_dropdown */
+.cart_dropdown {
+  position: fixed;
+  visibility: hidden;
+  display: flex;
+  transform: translateX(100%);
+  top: 100px;
+  width: 40%;
+  background-color: white;
+  z-index: 10000;
+  right: 0;
+  transition: all 0.3s ease;
+  flex-direction: column;
+  overflow: auto;
+  max-height: 80%;
+  
+}
+.cart_dropdown.show {
+  visibility: visible;
+  transform: translateX(0%);
+  transition: all 0.3s ease;
+}
+
+.cart__title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  margin-top: 10px;
+  position: relative;
+}
+
+.cart__title::before,
+.cart__title::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  height: 2px;
+  border-top: solid 3px black;
+  width: calc((100% - 12rem) / 2);
+  z-index: -1;
+}
+
+.cart__title::before {
+  left: 0;
+  transform: translateY(-50%);
+  border-radius: 30px 0 0 30px;
+  margin-left: 40px;
+}
+
+.cart__title::after {
+  right: 0;
+  transform: translateY(-50%);
+  border-radius: 0 30px 30px 0;
+  margin-right: 40px;
+}
+
+.cart__container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 5px;
+  width: 90%;
+  margin-left: 5%;
+}
+
+.cart__product {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+}
+
+.cart__image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  flex-basis: 30%;
+}
+
+.cart__image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.cart__product-details {
+  flex-basis: 70%;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart__product-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 10px 0;
+  padding-top: 20px;
+
+
+}
+
+.cart__product-description {
+  font-size: 0.9rem;
+  margin: 10px 0;
+}
+
+.cart__quantity {
+  display: flex;
+  align-items: center;
+}
+
+.cart__total-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+
+.cart__product-buttons {
+  display: flex;
+  align-items: center;
+  
+}
+
+.cart__button-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #ffc77e;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  margin-left: 10px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.cart__button-remove:hover {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);
+  transform: translateY(2px);
+}
+
+.cart_product-buttons-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+}
+
+.cart_product-buttons-icon img {
+  width: 60%;
+  height: 60%;
+}
+
+
+
+.cart__summary {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  height: 300px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  margin-left: 5%;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.cart__quantity-container {
+  display: flex;
+  width: 90%;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.cart__quantity-container div {
+  font-weight: bold;
+}
+
+.cart__total-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 90%;
+}
+
+.cart__total-container div {
+  font-weight: bold;
+}
+
+.cart__summary hr {
+  height: 0.5px;
+  width: 90%;
+  background: #333;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.cart__summary label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+
+.order_btn {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #fcb558;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease-in-out;
+  
+}
+
+.order_btn:hover {
+  background-color: #fcb558;
+  cursor: pointer;
+  opacity: 0.9;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.order_btn:focus {
+  outline: none;
+}
+
+
+/* End Section cart_dropdown */

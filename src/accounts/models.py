@@ -13,12 +13,16 @@ class CustomUser(AbstractUser):
     
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
     
     def __str__(self):
         if self.username:
             return self.username
         else:
             return "Anonymous"
-        
+    
+    def save(self, *args, **kwargs):
+        if not self.username:
+            self.username = f"{self.first_name} {self.last_name[0]}"
+        super().save(*args, **kwargs)   
     

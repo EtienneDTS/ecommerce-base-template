@@ -5,12 +5,17 @@
     <title>S'inscrire</title>
 {% endblock %}
 
-{% block content %}
-    
-    <form method="POST" action="{% url 'accounts:signup' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">S'inscrire</button>
-    </form>
+{% block addstylesheet %}
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+{% endblock %}
 
+{% block content %}
+    <div class="form_container">
+        <h1>S'INSCRIRE</h1>
+        <form method="POST" action="{% url 'accounts:signup' %}" class="sign_up_form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">S'INSCRIRE</button>
+        </form>
+    </div>
 {% endblock %}

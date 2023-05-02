@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", function(event) {
+  get_cart_data();
+});
+
 var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
 var flavor_selector = document.getElementById("flavor-select");
@@ -36,7 +40,7 @@ for (var i = 0; i < option_buttons.length; i++) {
     
           // Met à jour le prix du produit
           document.getElementById('product-details__price-info').textContent = data.price + " €";
-          document.getElementById("variant-slug-input").value = data.slug
+          document.getElementById("variant-id-input").value = data.variant_id
         }
       })
     });
@@ -88,10 +92,10 @@ $(document).ready(function() {
           success: function(data) {
               // Afficher un message de confirmation ou rediriger vers la page de panier
               var badge = document.querySelector(".badge")
-              
               var notification = document.querySelector(".notification");
               var btn = document.querySelector(".btn-primary");
               btn.classList.add("btn-loading")
+              get_cart_data()
               setTimeout(function(){
                 notification.classList.add('show');
                 btn.classList.remove("btn-loading");

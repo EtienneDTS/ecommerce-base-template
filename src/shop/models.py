@@ -38,7 +38,10 @@ class Product(models.Model):
         
     @property    
     def product_title(self):
-        return f"{self.brand} - {self.name}"
+        if self.brand:
+            return f"{self.brand} - {self.name}"
+        else:
+            return self.name
 
 # allow several images for one product        
 class ProductImages(models.Model):
@@ -73,13 +76,14 @@ class ProductVariant(models.Model):
     
     class Meta:
         verbose_name = "Variante"
+    
         
     def __str__(self) -> str:
         return f"{self.product.product_title} - {self.variant_name}"
     
     @property    
     def product_variant_title(self):
-        return f"{self.variant_name}"
+        return f"{self.product.name} - {self.variant_name}"
     
     def save(self, *args, **kwargs):
         if not self.variant_name:

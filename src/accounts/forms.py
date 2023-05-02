@@ -12,16 +12,23 @@ class SignUpForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = [
+            "email",
             "first_name",
             "last_name",
-            "email",
-            "username",
             "password",
         ]
         
         widgets = {
             'password': forms.PasswordInput(),
         }
+    
+    def __init__(self, *args, **kwargs):
+            super(SignUpForm, self).__init__(*args, **kwargs)
+            self.fields['email'].label_suffix = ""
+            self.fields['first_name'].label_suffix = ""
+            self.fields['last_name'].label_suffix = ""
+            self.fields['password'].label_suffix = ""
+            self.fields['confirm_password'].label_suffix = ""
     
     #all clean_data transleted in french   
     def clean_email(self):
@@ -45,13 +52,12 @@ class SignUpForm(forms.ModelForm):
             raise forms.ValidationError("Les mots de passe ne correspondent pas. Veuillez saisir le même mot de passe dans les deux champs.")
         return password2
     
-    def clean_username(self):
-        username = self.cleaned_data.get("username")
-        if CustomUser.objects.filter(username=username).exists():
-            raise forms.ValidationError("Ce nom d'utilisateur est déjà pris.")
-        if not re.match(r'^\w+$', username):
-            raise forms.ValidationError("Le nom d'utilisateur ne peut contenir que des lettres, des chiffres et des underscores.")
-        return username
+    def clean(self):
+        cleaned_data = super().clean()
+        first_name = cleaned_data.get("first_name")
+        last_name = cleaned_data.get("last_name")
+        if not first_name or not last_name:
+            raise forms.ValidationError("Veuillez inscrire votre prénom et votre nom de famille.")
     
 class LoginForm(AuthenticationForm):
     remember_me = forms.BooleanField(
@@ -60,13 +66,17 @@ class LoginForm(AuthenticationForm):
         widget=forms.CheckboxInput(attrs={
             'class': 'form-check-input',
         }),
-        label="Remember me"
+        label="Se souvenir de moi",
+        label_suffix=""
+        
     )
     
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
-        self.fields['username'].label = "Adresse e-mail"
+        self.fields['username'].label = "e-mail"
+        self.fields['username'].label_suffix = ""
         self.fields['password'].label = "Mot de passe"
+        self.fields['password'].label_suffix = ""
         
 class CustomPasswordChangeForm(PasswordChangeForm):
     old_password = forms.CharField(

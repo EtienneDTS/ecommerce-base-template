@@ -11,30 +11,158 @@
 {% endblock %}
 
 {% block content %}
+<div class="banner_container">
+  <img src="{% static 'ressources/banner_image.jpg' %}" alt="banner image">
+  <h1>{{category}}</h1>
+</div>
+
+<div class="filter">
+  {% if products_variant_list_count == 1 %}
+  <div class="product_number">
+    <span>{{products_variant_list_count}} Produit</span>
+  </div>
+  {% elif products_variant_list_count > 1 %}
+  <div class="product_number">
+    <span>{{products_variant_list_count}} Produits</span>
+  </div>
+  {% endif %}
+  {% if min_price != "0" or max_price != max_variant_price %}
+  <div class="price_filter" id="price_filter">
+    <span>{{min_price}}€ - {{max_price}}€</span>
+    <div  class="price_filter_close_btn">
+      <img src="{% static 'ressources/cross_icon.png' %}" alt="cross">
+    </div>
+  </div>
+  {% endif %}
+  {% if sort_by == "asc_price" %}
+    <div class="sort_by_filter">
+      <span>Prix croissant</span>
+      <div  class="sort_by_close">
+        <img src="{% static 'ressources/cross_icon.png' %}" alt="cross">
+      </div>
+    </div>
+  {% elif sort_by == "desc_price" %}
+    <div class="sort_by_filter">
+      <span>Prix décroissant</span>
+      <div class="sort_by_close">
+        <img src="{% static 'ressources/cross_icon.png' %}" alt="cross">
+      </div>
+    </div>
+  {% elif sort_by == "a-z" %}
+    <div class="sort_by_filter">
+      <span>Nom A-Z</span>
+      <div href="" class="sort_by_close">
+        <img src="{% static 'ressources/cross_icon.png' %}" alt="cross">
+      </div>
+    </div>
+  {% elif sort_by == "z-a" %}
+    <div class="sort_by_filter">
+      <span>Nom Z-A</span>
+      <div  class="sort_by_close">
+        <img src="{% static 'ressources/cross_icon.png' %}" alt="cross">
+      </div>
+    </div>
+    
+  {% endif %}
+  <div class="show_filter">
+    <span>Afficher les filtres</span>
+    <img src="{% static 'ressources/filter_icon.png' %}" alt="filter icon">
+  </div>
+</div>
+
+<div class="sort_tools_container">
+    <form action="" method="GET">
+    <div class="price_range">
+      <div class="price_input">
+        <div class="fields">
+          <label for="input_min" class="label_min">De</label>
+          <input type="number" class="input_min" value="{{min_price}}" name="input_min">
+        </div>
+        <div class="fields">
+          <label for="input_max" class="label_max">à</label>
+          <input type="number" class="input_max" value="{{max_price}}" name="input_max">
+        </div>
+      </div>
+      <div class="slider">
+        <div class="progress"></div>
+      </div>
+      <div class="range_input">
+        <input type="range" class="range_min" min="0" max="{{max_variant_price}}" value="{{min_price}}" step="10">
+        <input type="range" class="range_max" min="0"max="{{max_variant_price}}" value="{{max_price}}" step="10">
+      </div>
+    </div>
+
+    <div class="sort-selector">
+      <label for="sort_by">Trier par</label>
+      <select id="sort_select" name="sort_by" >
+        {% if sort_by == "asc_price" %}
+        <option value="asc_price">Prix croissant</option>
+        <option value="desc_price">Prix décroissant</option>
+        <option value="a-z">Nom A-Z</option>
+        <option value="z-a">Nom Z-A</option>
+        <option value="none">Aucun</option>
+        {% elif sort_by == "desc_price" %}
+        <option value="desc_price">Prix décroissant</option>
+        <option value="asc_price">Prix croissant</option>
+        <option value="a-z">Nom A-Z</option>
+        <option value="z-a">Nom Z-A</option>
+        <option value="none">Aucun</option>
+        {% elif sort_by == "desc_price" %}
+        <option value="desc_price">Prix décroissant</option>
+        <option value="asc_price">Prix croissant</option>
+        <option value="a-z">Nom A-Z</option>
+        <option value="z-a">Nom Z-A</option>
+        <option value="none">Aucun</option>
+        {% elif sort_by == "a-z" %}
+        <option value="a-z">Nom A-Z</option>
+        <option value="desc_price">Prix décroissant</option>
+        <option value="asc_price">Prix croissant</option>
+        <option value="z-a">Nom Z-A</option>
+        <option value="none">Aucun</option>
+        {% elif sort_by == "z-a" %}
+        <option value="z-a">Nom Z-A</option>
+        <option value="a-z">Nom A-Z</option>
+        <option value="desc_price">Prix décroissant</option>
+        <option value="asc_price">Prix croissant</option>
+        <option value="none">Aucun</option>
+        {% else %}
+        <option value="none">Aucun</option>
+        <option value="asc_price">Prix croissant</option>
+        <option value="desc_price">Prix décroissant</option>
+        <option value="a-z">Nom A-Z</option>
+        <option value="z-a">Nom Z-A</option>
+        {% endif %}
+      </select>
+    </div>
+  
+  <button class="form_btn">APPLIQUER</button>
+  </form>
+</div>
+
+
 
 <div class="container">
-    <h1>Nos produits</h1>
     <div class="products">
-      {% for variant in products_variant %}
-      <a href="{% url 'shop:product_detail' slug=variant.product.slug variant_slug=variant.variant_slug %}">
+      {% for variant in products_variant_list %}
+      <a href="{% url 'shop:product_detail' slug=variant.product.slug variant_slug=variant.variant_slug product_id=variant.product.id variant_id=variant.id %}">
       <div class="product">
             <div class="product-image">
               <img src="{{ variant.image.url }}" alt="{{ variant.variant_name }}">
-              <form action="{% url 'shop:add_to_cart' slug=variant.product.slug %}" method="POST" class="add-to-cart-form">
+              <form action="{% url 'shop:add_to_cart' product_id=variant.product.id %}" method="POST" class="add-to-cart-form">
                 {% csrf_token %}
-                <input type="text" value="{{variant.variant_slug}}" name="variant_slug" hidden>
+                <input type="text" value="{{variant.id}}" name="variant_id" hidden>
                 <input type="number" name="quantity" value="1" hidden>
                 <button class="add-to-cart">AJOUTER AU PANIER</button>
               </form>
             </div>
           <div class="product-info">
-            <h2>{{ variant.product.product_title }}</h2>
+            <h2>{{ variant.product_variant_title }}</h2>
             <p class="product-price">{{ variant.price }} €</p>
           </div>
       </a>
         </div>
       {% empty %}
-        <p>Aucun produit n'est disponible pour le moment.</p>
+        <p class="empty">Aucun produit n'est disponible pour le moment.</p>
       {% endfor %}
     </div>
   </div>

@@ -95,7 +95,7 @@ DATABASES = {
     }
 }
 
-
+label_suffix = ''
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -141,7 +141,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.CustomUser"
-LOGIN_REDIRECT_URL = 'shop:home_shop'
+LOGIN_REDIRECT_URL = "accounts:profile"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "mediafiles"

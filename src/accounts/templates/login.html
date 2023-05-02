@@ -4,14 +4,22 @@
 {% block title %}
     <title>Connexion</title>
 {% endblock %}
+
+{% block addstylesheet %}
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+{% endblock %}
     
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Se connecter</button>
-    </form>
 
-<hr>
-<p>Pas encore inscrit ? <a href="{% url 'accounts:signup' %}">Inscrivez-vous</a></p>
+    <div class="form_container">
+        <h1>CONNEXION</h1>
+        <form method="post" class="sign_up_form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">SE CONNECTER</button>
+        </form>
+        <p class="sign_up_redirection">Pas encore inscrit ? <a href="{% url 'accounts:signup' %}" class="sign_up_link">Inscrivez-vous</a></p>
+        <a href="#" class="forgotten_password">Mot de passe oublié ?</a>
+    </div>
+   
 {% endblock %}

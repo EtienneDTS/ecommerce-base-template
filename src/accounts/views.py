@@ -3,7 +3,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 
 from .forms import SignUpForm, LoginForm, CustomPasswordChangeForm
 from .models import CustomUser
@@ -28,20 +28,39 @@ def signup(request):
                 form.add_error('confirm_password', "Les mots de passe ne correspondent pas.")
     else:
         form = SignUpForm()
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+    else:
+        session_key = request.session.session_key
+        if not session_key:
+            request.session.cycle_key()
+        cart = Cart.objects.filter(session_key=request.session.session_key).first()
     return render(request, "signup.html", context={
-        "form": form
+        "form": form,
+        "cart":cart
     })
     
 class Login(LoginView):
     template_name = 'login.html'
-    success_url = reverse_lazy('shop:home_shop')
+    success_url = reverse_lazy('accounts:profile')
     authentication_form = LoginForm
     fields = ['email', 'password']
-
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            cart = Cart.objects.filter(user=self.request.user).first()
+        else:
+            session_key = self.request.session.session_key
+        if not session_key:
+            self.request.session.cycle_key()
+        cart = Cart.objects.filter(session_key=self.request.session.session_key).first()
+        context['cart'] = cart
+        return context
+    
     def form_valid(self, form):
         """Security check complete. Log the user in."""
         session_key=self.request.session.session_key
-        print(session_key)
         response = super().form_valid(form)
         remember_me = form.cleaned_data['remember_me']
         if not remember_me:
@@ -61,7 +80,7 @@ class Login(LoginView):
         return response
     
 class Logout(LogoutView):
-    next_page = 'shop:home_shop'
+    next_page = 'accounts:login'
     
 def profile(request):
     if not request.user.is_authenticated:

@@ -45,7 +45,7 @@
                     {% endif %}
                 </div>
             </div>
-            <form method="POST" action="{% url 'shop:add_to_cart' slug=product.slug %}" class="product-details__form">
+            <form method="POST" action="{% url 'shop:add_to_cart' product_id=product.id %}" class="product-details__form">
                 {% csrf_token %}
                 <div class="product-details__quantity">
                     <label for="quantity" style="visibility: hidden">Quantité:</label>
@@ -54,7 +54,7 @@
                         <input type="number" name="quantity" value="1" min="1" class="input-number">
                         <button id="increment" type="button"> + </button>
                     </div>
-                    <input type="hidden" name="variant_slug" value="{{product_variant.variant_slug}}" id="variant-slug-input">
+                    <input type="hidden" name="variant_id" value="{{product_variant.id}}" id="variant-id-input">
                 </div>
                 <div class="product-details__add-to-cart">
                     <button type="submit" class="btn btn-primary">AJOUTER AU PANIER</button>
@@ -71,8 +71,8 @@
     <script>
 
         var default_selected_option = "{{product_variant.option}}";
-        var get_variant_view_url = "{% url 'shop:get_product_variant_url' slug=product.slug %}"
-        var update_variant_detail = "{% url 'shop:update_variant_detail' slug=product.slug %}"
+        var get_variant_view_url = "{% url 'shop:get_product_variant_url' product_id=product.id %}"
+        var update_variant_detail = "{% url 'shop:update_variant_detail' product_id=product.id %}"
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/product_detail.js' %}"></script>
