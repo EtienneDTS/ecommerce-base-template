@@ -25,4 +25,11 @@ class CustomUser(AbstractUser):
         if not self.username:
             self.username = f"{self.first_name} {self.last_name[0]}"
         super().save(*args, **kwargs)   
+
+class Newsletter(models.Model):
+    email = models.EmailField(unique=True)
+    date_subscribed = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
     

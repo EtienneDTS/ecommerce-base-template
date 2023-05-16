@@ -1,6 +1,5 @@
 let dropdown_remove_btn
 let badge = document.querySelector(".badge");
-console.log(badge)
 // Section get_cart_url
 
 const trash_icon_url = document.querySelector("#get_trash_icon_url").getAttribute("url")
@@ -8,7 +7,6 @@ function get_cart_data() {
   fetch("/shop/get_cart_data")
     .then(response => response.json())
     .then(data => {
-      console.log(data)
       var products = data.products;
       var totalQuantity = data.total_quantity;
       var totalPrice = data.total_ttc;
@@ -116,11 +114,39 @@ cart_dropdown.addEventListener("mouseleave", ()=>{
   }, 600);
 })
 
-
-
-
-
-
-
-
 // End Section cart_dopdown
+
+// Section Newsletter
+document.getElementById('newsletterForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  let form = event.target;
+  let formData = new FormData(form);
+
+  // Envoyer la requête AJAX
+  fetch(form.action, {
+      method: form.method,
+      body: formData
+  })
+  .then(function(response) {
+      // Gérer la réponse de la requête
+      if (response.ok) {
+        form.style.display = 'none'; // Cacher le formulaire
+        var successMessage = document.createElement('p');
+        successMessage.classList.add("success_msg")
+        successMessage.textContent = 'Inscription réussie !';
+        form.parentNode.appendChild(successMessage);
+        return response.json();
+      } else {
+          // Erreur - faire quelque chose (ex: afficher un message d'erreur)
+          console.error("Erreur lors de l'inscription.");
+          return response.json();
+      }
+  })
+  .catch(function(error) {
+      // Erreur de connexion - faire quelque chose (ex: afficher un message d'erreur)
+      console.error("Erreur de connexion.");
+  });
+});
+
+// End Section Newsletter

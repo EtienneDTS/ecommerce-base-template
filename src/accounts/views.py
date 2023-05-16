@@ -4,9 +4,10 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse, reverse_lazy
+from django.http import JsonResponse
 
 from .forms import SignUpForm, LoginForm, CustomPasswordChangeForm
-from .models import CustomUser
+from .models import CustomUser, Newsletter
 from shop.models import Cart
 
 # Create your views here.
@@ -105,3 +106,20 @@ def change_password(request):
     else:
         form = CustomPasswordChangeForm(request.user)
     return render(request, 'change_password.html', {'form': form})
+
+def newsletter(request):
+    if request.method == "POST":
+        mail = request.POST.get('email')
+        if Newsletter.objects.filter(email=mail).exists():
+            data = {'status':'suscribed'}
+            return JsonResponse(data)
+        else :
+            subscriber = Newsletter(email=mail)
+            subscriber.save()
+            data = {'status':'suscribed'}
+            return JsonResponse(data)   
+    response_data = {'error': 'Méthode non autorisée'}
+    return JsonResponse(response_data, status=405)
+    
+    
+    

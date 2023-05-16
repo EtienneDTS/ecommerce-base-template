@@ -134,3 +134,7 @@ p:has(#id_remember_me) {
         width: 90%;
     }
   }
+
+  footer {
+    display: none;
+  }

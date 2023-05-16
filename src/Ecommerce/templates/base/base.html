@@ -116,6 +116,99 @@
     </main>
 
     {% block footer %}
+    <footer>
+        <div class="top_footer">
+            <div class="info">
+                <div class="icon icone1">
+                    <img src="{% static 'ressources/bag.png' %}" alt="Icone caddie">
+                </div>
+                <h3>SELECTION</h3>
+                <div class="info_description">
+                    <span>Vous faites vos choix parmi nos produits soigneusement conçus pour répondre à vos besoins. Nous sommes engagés à vous offrir une expérience de première classe en proposant des produits durables, fiables et de hautes qualités.</span>
+                </div>
+            </div>
+            <div class="info">
+                <div class="icon icone2">
+                    <img src="{% static 'ressources/credit_card.png' %}" alt="Icone carte de crédit">
+                </div>
+                <h3 class="title2">PAIEMENT</h3>
+                <div class="info_description info_description2">
+                    <span>Paiment 100% sécurisé, nous nous soucions de l'intégrité de vos informations personnelles. C'est pourquoi nous offrons des solutions de paiement sûre avec Paypal et Stripe. </span>
+                </div>
+            </div>
+            <div class="info">
+                <div class="icon icon3">
+                    <img src="{% static 'ressources/package.png' %}" alt="Icon d'un colis">
+                </div>
+                <h3>LIVRAISON</h3>
+                <div class="info_description">
+                    <span>Livraison fiable et rapide de nos produits. Nous travaillons avec des partenaires de livraison pour vous offrir la meilleure expérience de livraison.</span>
+                </div>
+            </div>
+            <div class="info">
+                <div class="icon icon4">
+                    <img src="{% static 'ressources/customer_service.png' %}" alt="Icone service client">
+                </div>
+                <h3>SERVICE</h3>
+                <div class="info_description">
+                    <span>Un service client dédiée là pour vous aider à tout moment et vous offrir un soutien personnalisé et fiable pour garantir votre satisfaction du lundi au vendredi.</span>
+                </div>
+            </div>
+        </div>
+        <div class="central_footer">
+            <div class="about_us">
+                <h4>A propos</h4>
+                <span class="description">Notre équipe de passionnés travaille sans relâche pour développer des produits innovants répondant aux besoins les plus spécifiques des amateurs de hardware sur mesure les plus exigeants. Nous sommes fiers de notre engagement à repousser les limites du marché dans ce domaine et nous nous engageons à offrir à nos clients une expérience d'achat et de service exceptionnelle. Alors suivez notre aventure sur nos réseaux ! </span>
+                <div class="social_network" id="social_network">
+                    <div class="icon1"><a href="#"><img src="{% static 'ressources/tiktok.svg' %}" alt="tiktok icon"></a></div>
+                    <div class="icon2"><a href="#"><img id="icon2_img"src="{% static 'ressources/youtube.svg' %}" alt="youtube icon"></a></div>
+                    <div class="icon3"><a href="#"><img src="{% static 'ressources/instagram.svg' %}" alt="instragram icon"></a></div>
+                </div>
+            </div>
+            <div class="navigation">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="#">Keycaps</a></li>
+                    <li><a href="#">Clavier</a></li>
+                    <li><a href="#">Switch</a></li>
+                    <li><a href="#">Tapis</a></li>
+                    <li><a href="#">Tous nos produits</a></li>
+                </ul>
+            </div>
+            <div class="legals">
+                <h4>Légales</h4>
+                <ul>
+                    <li><a href="#">Conditions Générales De Ventes</a></li>
+                    <li><a href="#">Politique De Confidentialité</a></li>
+                    <li><a href="#">Conditions D'utilisation</a></li>
+                    <li><a href="#">Politique De Cookies</a></li>
+                    <li><a href="#">Politique De Retour Et Remboursement</a></li>
+                    <li><a href="#">Mentions Légales</a></li>
+                </ul>
+            </div>
+            <div class="information">
+                <h4>Informations</h4>
+                <ul>
+                    <li><a href="#">Questions Fréquentes
+                    </a></li>
+                    <li><a href="#">Nous contacter</a></li>
+                    <li><a href="#">Suivi De Colis</a></li>
+                    <li><a href="#">Blog</a></li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="bottom_footer">
+            <div class="newsletter">
+                <form action="{% url 'accounts:newsletter' %}" method="post" id="newsletterForm">
+                    {% csrf_token %}
+                    <label for="email">Inscrivez-vous à notre newsletter </label>
+                    <input type="email" id="email" name="email" placeholder="Votre adresse e-mail" required>
+                    <button type="submit">S'inscrire</button>
+                </form>
+            </div>
+        </div>
+    </footer>
     {% endblock %}
     <div id="get_trash_icon_url" url="{% static 'ressources/trash_icon.png' %}" style="display: none;"></div>
     {% block scripts %}

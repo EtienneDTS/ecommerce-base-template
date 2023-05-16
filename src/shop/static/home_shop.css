@@ -310,11 +310,18 @@ input[type="range"]::-webkit-range-thumb {
 /* End Section sort Tools */
 
 /* Section product container */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .products {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 40px;
+    max-width: 1424px;
+
   }
   
 .product {
