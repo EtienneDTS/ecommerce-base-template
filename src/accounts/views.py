@@ -24,7 +24,7 @@ def signup(request):
                 user = CustomUser(**cleaned_data)
                 user.set_password(password)
                 user.save()
-                return redirect('shop:home_shop')
+                return redirect('shop:cart')
             else:
                 form.add_error('confirm_password', "Les mots de passe ne correspondent pas.")
     else:

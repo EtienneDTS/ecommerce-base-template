@@ -73,10 +73,11 @@ def product_detail(request, slug, variant_slug, product_id, variant_id):
     product = get_object_or_404(Product, id=product_id)
     product_variants = ProductVariant.objects.filter(product=product).order_by("price")
     product_variant = get_object_or_404(ProductVariant, variant_slug=variant_slug, product=product, id=variant_id)
-    flavors = set([variant.flavor for variant in product_variants if variant.flavor])
-    colors = set([variant.color for variant in product_variants if variant.color])
-    options = product_variant.get_options_for_product_variant()
-    
+    options_1 = set([variant.option_1 for variant in product_variants if variant.option_1])
+    if product_variant.option_1 :
+        options_2 = set([variant.option_2 for variant in product_variants.filter(option_1=product_variant.option_1) if variant.option_2])
+    else:
+        options_2 = set([variant.option_2 for variant in product_variants if variant.option_2])
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user).first()
     else:
@@ -89,10 +90,10 @@ def product_detail(request, slug, variant_slug, product_id, variant_id):
         "cart": cart,
         "product_variants": product_variants,
         "product_variant": product_variant,
-        "flavors": flavors,
-        "options": options,
-        "colors": colors,
-        "option_name": product_variant.option_name,
+        "options_1": options_1,
+        "options_2": options_2,
+        "option_name_1": product_variant.option_name_1,
+        "option_name_2": product_variant.option_name_2,
     } 
     
     return render(request, "shop/product_detail.html", context)
@@ -100,30 +101,25 @@ def product_detail(request, slug, variant_slug, product_id, variant_id):
     
 def get_product_variant_url(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+    print("salut salut salut")
     if request.method == "POST":
-        if request.POST.get("color") != None:
-            color = request.POST.get("color")
-            product_variant = ProductVariant.objects.filter(product=product, color=color).order_by("price").first()
+        if request.POST.get("option_1") != None:    
+            option_1 = request.POST.get("option_1")
+            product_variant = ProductVariant.objects.filter(product=product, option_1=option_1).order_by("price").first()
             url = reverse('shop:product_detail', args=[product.slug, product_variant.variant_slug, product.id, product_variant.id ])
-            data = {'url': url}
-        if request.POST.get("flavor") != None:    
-            flavor = request.POST.get("flavor")
-            product_variant = ProductVariant.objects.filter(product=product, flavor=flavor).order_by("price").first()
-            url = reverse('shop:product_detail', args=[product.slug, product_variant.variant_slug, product.id, product_variant.id ])
-            data = {'url': url}
+            data = {'url': url} 
         return JsonResponse(data)
     
 def update_variant_detail(request, product_id):
+    print("bonjour")
     product = get_object_or_404(Product, id=product_id)
-    flavor = None
-    color = None
+    option_1 = None
     if request.method == "POST":
-        if request.POST.get("flavor") != None:    
-            flavor = request.POST.get("flavor")
-        if request.POST.get("flavor") != None:    
-            flavor = request.POST.get("flavor")
-        option = request.POST.get("option")
-        product_variant = get_object_or_404(ProductVariant, product=product, option=option, flavor=flavor, color=color)
+        if request.POST.get("option_1") != None:    
+            option_1 = request.POST.get("option_1")
+        if request.POST.get("option") != None:
+            option = request.POST.get("option")
+        product_variant = get_object_or_404(ProductVariant, product=product, option_2=option, option_1=option_1)
         data = {
             "image_url": product_variant.image.url,
             "price": product_variant.price,

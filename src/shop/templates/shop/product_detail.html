@@ -22,25 +22,25 @@
             <div class="separator"></div>
             <div class="product-details__options">
                 <div class="product-details__option">
-                    {% if product_variant.flavor %}
-                    <div class="product-details__flavor">
-                        <label for="flavor-select">Saveur</label>
-                        <select class="form-select flavor-selector"id="flavor-select" name="flavor">
-                            {% for flavor in flavors %}
-                                <option value="{{ flavor }}" {% if flavor == product_variant.flavor %}selected{% endif %}>{{ flavor }}</option>
+                    {% if product_variant.option_1 %}
+                    <div class="product-details__option_1" url="{% url 'shop:get_product_variant_url' product_id=product.id %}">
+                        <label for="flavor-option_1">{{ option_name_1 }}</label>
+                        <select class="form-select option_1-selector"id="option_1-select" name="option_1">
+                            {% for option_1 in options_1 %}
+                                <option value="{{ option_1 }}" {% if option_1 == product_variant.option_1 %}selected{% endif %}>{{ option_1 }}</option>
                             {% endfor %}
                         </select> 
                     </div>
                     {% endif %}
-                    {% if product_variant.option %}
+                    {% if product_variant.option_2 %}
                     <div class="product-details__option-name">
-                        <label for="option-select">{{option_name }}</label>
+                        <label for="option-select">{{option_name_2 }}</label>
                     </div>
                     <div class="product-details__option-buttons">
-                        {% for option in options %}
-                            <button type="button" data-value="{{ option }}" class="btn {% if option == product_variant.option %}active{% endif %}">{{option }}</button>
+                        {% for option_2 in options_2 %}
+                            <button type="button" data-value="{{ option_2 }}" class="btn {% if option_2 == product_variant.option_2 %}active{% endif %}">{{option_2 }}</button>
                         {% endfor %}
-                        <input type="hidden" id="selected-option" name="option" value="{{ product_variant.option }}">
+                        <input type="hidden" id="selected-option" name="option" value="{{ product_variant.option_2 }}">
                     </div>
                     {% endif %}
                 </div>

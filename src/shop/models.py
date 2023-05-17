@@ -67,10 +67,10 @@ class ProductVariant(models.Model):
     variant_slug = models.SlugField(default="", blank=True, verbose_name="Slug de la variante")
     variant_name = models.CharField(max_length=255, verbose_name="Nom de variante", blank=True, null=True)
     image = models.ImageField(upload_to='shop', blank=True, null=True)
-    color = models.CharField(max_length=255, verbose_name="Couleur du produit", blank=True, null=True)
-    flavor = models.CharField(max_length=255, verbose_name="Saveur du produit", blank=True, null=True)
-    option_name = models.ForeignKey(OptionName, on_delete=models.CASCADE, verbose_name="Nom de l'option", blank=True, null=True)
-    option = models.CharField(max_length=255, verbose_name="Option", blank=True, null=True)
+    option_name_1 = models.ForeignKey(OptionName, on_delete=models.CASCADE, verbose_name="Nom de l'option 1", blank=True, null=True, related_name='option_name_1_variants')
+    option_1 = models.CharField(max_length=255, verbose_name="Option 1", blank=True, null=True)
+    option_name_2 = models.ForeignKey(OptionName, on_delete=models.CASCADE, verbose_name="Nom de l'option 2", blank=True, null=True, related_name='option_name_2_variants')
+    option_2 = models.CharField(max_length=255, verbose_name="Option 2", blank=True, null=True)
     stock = models.IntegerField(default=0, verbose_name="Stock")
     price = models.DecimalField(max_digits=7, decimal_places=2, default = 0.00,verbose_name="Prix")
     
@@ -86,38 +86,17 @@ class ProductVariant(models.Model):
         return f"{self.product.name} - {self.variant_name}"
     
     def save(self, *args, **kwargs):
-        if not self.variant_name:
-            variant_name = ""
-            if self.flavor:
-                variant_name += f"{self.flavor} - "
-            if self.color:
-                variant_name += f"{self.color} - "
-            if self.option:
-                variant_name += f"{self.option} - "
+        variant_name = ""
+        if self.option_1:
+            variant_name += f"{self.option_1} - "
+        if self.option_2:
+            variant_name += f"{self.option_2}"
         variant_name = variant_name.rstrip().rstrip('-')
         self.variant_name = variant_name 
         if not self.variant_slug:
             self.variant_slug = slugify(self.variant_name)  
         super().save(*args, **kwargs)
-        
-    def get_options_for_product_variant(self):
-        """
-        Returns a set of all options for product variants with the given flavor or color.
-        """
-        product_variants = ProductVariant.objects.filter(product=self.product)
-        if self.flavor:
-            options = set([variant.option for variant in product_variants if variant.flavor and variant.flavor == self.flavor])
-            return options    
-            
-        if self.color:
-            options = set([variant.option for variant in product_variants if variant.color and variant.color == self.color])
-            return options
-        
-        options = set([variant.option for variant in product_variants])  
-        return options
-        
-        
-    
+
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     session_key = models.CharField(max_length=40, null=True, blank=True, unique=True)

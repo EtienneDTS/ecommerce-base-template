@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
-var flavor_selector = document.getElementById("flavor-select");
+var option_1_selector = document.getElementById("option_1-select");
 var option_buttons = document.querySelectorAll('.product-details__option-buttons button');
 var hiddenInput = document.querySelector("#selected-option");
 hiddenInput.value = default_selected_option
@@ -31,7 +31,7 @@ for (var i = 0; i < option_buttons.length; i++) {
         type: "POST",
         data: {
           csrfmiddlewaretoken: csrfToken,
-          flavor: flavor_selector.value,
+          option_1: option_1_selector.value,
           option: hiddenInput.value
         },
         success: function(data) {
@@ -48,16 +48,29 @@ for (var i = 0; i < option_buttons.length; i++) {
 
 
 
-flavor_selector.addEventListener("change", ()=>{
-    var flavor_selector_value = flavor_selector.value
-    $.post(get_variant_view_url, {
-      flavor: flavor_selector_value,
-      csrfmiddlewaretoken : csrfToken,
-    }, function(data) {
-      var new_url = window.location.origin + data.url;
-      history.replaceState(null, null, new_url);
-      window.location.reload();
-    });
+option_1_selector.addEventListener("change", () => {
+    var option_1_selector_value = option_1_selector.value;
+    console.log(option_1_selector_value);
+    
+    let get_variant_view_url = document.querySelector(".product-details__option_1").getAttribute('url')
+    console.log(get_variant_view_url);
+  
+    fetch(get_variant_view_url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "option_1=" + encodeURIComponent(option_1_selector_value) + "&csrfmiddlewaretoken=" + encodeURIComponent(csrfToken),
+    })
+      .then(response => response.json())
+      .then(data => {
+        var new_url = window.location.origin + data.url;
+        history.replaceState(null, null, new_url);
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error("Une erreur s'est produite:", error);
+      });
   });
 
 var inputNumber = document.querySelector('input[name="quantity"]');

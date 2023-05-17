@@ -88,12 +88,12 @@ main {
   width: 100%;
 }
 
-.product-details__flavor,
+.product-details__option_1,
 .product-details__option-name {
   margin-bottom: 0.5rem;
 }
 
-.product-details__flavor select,
+.product-details__option_1 select,
 .product-details__option-buttons button {
   margin-right: 0.5rem;
 }
@@ -228,20 +228,20 @@ input[type=number]::-webkit-outer-spin-button {
   
 }
 
-.product-details__flavor {
+.product-details__option_1 {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
 
-.product-details__flavor label {
+.product-details__option_1 label {
   margin-bottom: 5px;
   font-size: 16px;
   font-weight: bold;
   color: #333;
 }
 
-.product-details__flavor select {
+.product-details__option_1 select {
   padding: 8px;
   border-radius: 5px;
   border: 1px solid #fcb558;
@@ -252,18 +252,18 @@ input[type=number]::-webkit-outer-spin-button {
   width: 100%;
 }
 
-.product-details__flavor select:focus {
+.product-details__option_1 select:focus {
   outline: none;
   border-color: #fcb558;
 }
 
-.product-details__flavor select option {
+.product-details__option_1 select option {
   font-size: 16px;
   color: #555;
   font-weight: bold;
 }
 
-.product-details__flavor select option[selected] {
+.product-details__option_1 select option[selected] {
   font-weight: bold;
   
 }
